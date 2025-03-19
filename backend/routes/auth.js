@@ -15,9 +15,21 @@ router.get("/register", (req, res) => {
 router.post("/register", async(req, res) => {
     try {
         const { name, email, password } = req.body;
+
+        const user = await pool.query(
+            "SELECT * FROM users where email=$1",
+            [email]
+        )
+
+        if (user.rowCount !== 0){
+            res.json({message: "user already registered"});
+        }
+
+        const hashedPassword = hash.encrypt(password);
+
         const newUser = await pool.query(
             "INSERT INTO users (name, email, password) VALUES ($1,$2,$3) RETURNING *",
-            [name, email, password]
+            [name, email, hashedPassword]
         )
         res.json(newUser.rows[0]);
     } catch (err) {
