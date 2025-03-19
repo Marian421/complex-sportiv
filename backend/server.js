@@ -1,13 +1,18 @@
 const express = require("express");
 const cors = require("cors");
-//require("dotenv").config();
+const pool = require("./db.js")
 const app = express();
+
+const auth = require('./routes/auth.js')
+
 app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Server is running!");
 });
+
+app.use("/auth", auth);
 
 app.post("/register", (req, res) => {
   res.json("works")
