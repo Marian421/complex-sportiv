@@ -7,6 +7,6 @@ import AuthForm from '../components/AuthForm.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AuthForm formType="login" />
+    <App />
   </StrictMode>,
 )

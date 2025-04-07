@@ -3,7 +3,8 @@ const cors = require("cors");
 const pool = require("./db.js")
 const app = express();
 
-const auth = require('./routes/auth.js')
+const auth = require('./routes/auth.js');
+const authenticateToken = require("./utils/authenticateToken.js");
 
 app.use(cors());
 app.use(express.json());

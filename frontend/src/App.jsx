@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
-import { fetchTerenuri } from "./services/api";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AuthForm from "../components/AuthForm";
+import NotFoundPage from "./pages/NotFoundPage";
 
-function App() {
-  const [terenuri, setTerenuri] = useState([]);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <div>Home Page</div>,
+    errorElement: <NotFoundPage />
+  },
+  {
+    path: '/login',
+    element: <AuthForm formType={'login'} />
+  },
+  {
+    path: '/register',
+    element: <AuthForm formType={'register'} />
+  }
+]);
 
-  useEffect(() => {
-    fetchTerenuri().then(setTerenuri);
-  }, []);
-
+const App = () => {
   return (
-    <div>
-      <h1>Terenuri disponibile</h1>
-      <ul>
-        {terenuri.map((teren) => (
-          <li key={teren.id}>
-            {teren.nume} - {teren.sport} ({teren.capacitate} persoane)
-          </li>
-        ))}
-      </ul>
-    </div>
+    <RouterProvider router={router}/> 
   );
-}
+};
 
 export default App;

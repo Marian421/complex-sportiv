@@ -1,16 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
-const hash = require('../utils/hash')
-
-
-router.get("/login", (req, res) => {
-    res.json({message: "login path works"});
-})
-
-router.get("/register", (req, res) => {
-    res.json({message: "register path works"})
-})
+const hash = require('../utils/hash');
+const jwt = require('jsonwebtoken');
 
 router.post("/register", async(req, res) => {
     try {
@@ -22,7 +14,7 @@ router.post("/register", async(req, res) => {
         )
 
         if (user.rowCount !== 0){
-            res.json({message: "user already registered"});
+            return res.json({message: "user already registered"});
         }
 
         const hashedPassword = hash.encrypt(password);
@@ -40,18 +32,29 @@ router.post("/register", async(req, res) => {
 router.post("/login", async(req, res) => {
     try {
         const { email, password } = req.body;
+
         const user = await pool.query(
             "SELECT * from users WHERE email=$1",
             [email]
         );
 
-        if (user.rowCount !== 0){
-            if (password === user.rows[0].password){
-                res.json({message: "logged in succesfully"})
-            }
+        if (user.rowCount === 0){
+            return res.json({message: "email not found"});
+        }
+        
+        const token = jwt.sign({ userId: user.rows[0].id },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRES_IN }
+        );
+
+        if (hash.compare(password, user.rows[0].password)){
+            return res.json({message: "logged in succesfully", token})
         }
 
-        res.json({message: "email not found"});
+
+        res.json({message: 'invalid password'});
+
+
     } catch (err) {
         console.error(err.message);
     }
