@@ -50,7 +50,8 @@ const AuthForm = ({ formType }) => {
         if (validateForm()) {
             console.log(`${formType} form submitted!`, formData);
             try {
-                const response = await fetch("http://localhost:5000/auth/login", {
+                const type = isRegister ? "register" : "login";
+                const response = await fetch(`http://localhost:5000/auth/${type}`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json",},
                     body: JSON.stringify(formData),
