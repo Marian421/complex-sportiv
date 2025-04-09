@@ -5,6 +5,7 @@ const hash = require('../utils/hash');
 const jwt = require('jsonwebtoken');
 const generateResetCode = require('../utils/generateResetCode');
 const sendResetEmail = require('../utils/sendResetEmail');
+const authenticateToken = require('../utils/authenticateToken');
 
 router.post("/register", async(req, res) => {
     try {
@@ -75,7 +76,20 @@ router.post("/reset", async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
+        const existingResetCode = await pool.query(
+            "SELECT * FROM reset_password WHERE user_id=$1 AND used=false AND expires_at > NOW()",
+            [user.rows[0].id]
+        );
+
+        if (existingResetCode.rows.length > 0) {
+            await pool.query(
+                "UPDATE reset_password SET used=true WHERE user_id=$1 AND used=false",
+                [user.rows[0].id]
+            );
+        }
+
         const code = generateResetCode();
+        const resetLink = `http://localhost:5173/reset/new-password?code=${code}`;
         const expires_at = new Date(Date.now() + 10 * 60 * 1000);
 
         const newResetCode = await pool.query(
@@ -83,7 +97,7 @@ router.post("/reset", async (req, res) => {
             [user.rows[0].id, code, expires_at]
         )
 
-        const emailSent = await sendResetEmail(email, code);
+        const emailSent = await sendResetEmail(email, resetLink);
 
         if (!emailSent) {
             await pool.query(
@@ -99,6 +113,58 @@ router.post("/reset", async (req, res) => {
         return res.status(500).json({ message: "Server error. Please try again later." });
     }
     
+})
+
+router.post('/verify-reset-code', async (req, res) => {
+    try {
+        const { code } = req.body;
+        
+        const result = await pool.query(
+          "SELECT * FROM reset_password WHERE code = $1 AND used = false AND expires_at > NOW()",
+          [code]
+        );
+    
+        if (result.rows.length === 0) {
+          return res.status(400).json({ message: "Invalid or expired reset code." });
+        }
+
+        const userId = result.rows[0].user_id;
+        const resetToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    
+        res.json({ 
+            message: "Code is valid, proceed with password reset.",
+            resetToken: resetToken
+         });
+    
+      } catch (err) {
+        console.error("Error during code verification:", err.message);
+        res.status(500).json({ message: "Server error during code verification" });
+      }
+})
+
+router.post("/reset-password", authenticateToken, async(req,res) => {
+  try {
+        const { newPassword } = req.body;
+        const { userId } = req.user;
+
+        const hashedPassword = hash.encrypt(newPassword);
+
+        const result = await pool.query(
+            "UPDATE users SET password = $1 WHERE id = $2 RETURNING *",
+            [hashedPassword, userId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        await pool.query("UPDATE reset_password SET used = true WHERE user_id = $1", [userId]);
+
+        res.json({ message: "Password successfully updated!" });
+    } catch (err) {
+        console.error("Error during password reset:", err.message);
+        res.status(500).json({ message: "Server error during password reset" });
+    }
 })
 
 
