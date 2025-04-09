@@ -133,7 +133,7 @@ router.post('/verify-reset-code', async (req, res) => {
     
         res.json({ 
             message: "Code is valid, proceed with password reset.",
-            resetToken: resetToken
+            resetToken
          });
     
       } catch (err) {

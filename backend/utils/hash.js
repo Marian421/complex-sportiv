@@ -1,4 +1,6 @@
 
+// simple algorithm for hashing the password in order to be secure for the database
+
 const hash = (() => {
     const encrypt = (password) => {
         let hash = 5381; 

@@ -25,11 +25,11 @@ CREATE TABLE reservations (
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     field_id INT REFERENCES fields(id) ON DELETE CASCADE,
     reservation_date DATE NOT NULL,  
-    start_time TIME NOT NULL,        
-    end_time TIME NOT NULL,          
+    time_slot_id INT REFERENCES time_slots(id) ON DELETE CASCADE,  -- Foreign key to time_slots
     status VARCHAR(20) DEFAULT 'pending',  
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 
 CREATE TABLE notifications (
@@ -55,5 +55,11 @@ CREATE TABLE reset_password (
     expires_at TIMESTAMP NOT NULL,
     used BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 
+CREATE TABLE time_slots (
+    id SERIAL PRIMARY KEY,
+    slot_name VARCHAR(50) NOT NULL,  
+    start_time TIME NOT NULL,        
+    end_time TIME NOT NULL           
+);

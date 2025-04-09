@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 
+// used for authorization, it takes the token from the authorization and checks if it's valid
+
 const authenticateToken = (req, res, next) => {
     const token = req.header("Authorization");
 

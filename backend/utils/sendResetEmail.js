@@ -1,5 +1,8 @@
 const nodemailer = require("nodemailer");
 
+// sends email to the user with a link for resetting the password
+// it takes the email to who is will be sent and the code
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
