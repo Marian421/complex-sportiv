@@ -23,4 +23,4 @@ const getAvailableSlots = async (fieldId, date) => {
   }
 };
 
-module.exports = { getAvailableSlots };
+module.exports = getAvailableSlots;

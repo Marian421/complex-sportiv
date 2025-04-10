@@ -47,16 +47,16 @@ router.post('/add', upload.single('image'), async (req, res) => {
 });
 
 router.get('/:fieldId/availability', async (req, res) => {
-  const { fieldId } = req.params; 
+  const { fieldId }  = req.params;
   const { date } = req.query;    
   
   try {
     const availableSlots = await getAvailableSlots(fieldId, date);
 
-    res.json(availableSlots.rows);  
+    res.json(availableSlots);  
   } catch (error) {
     console.error('Error fetching field availability:', error);
-    res.status(500).json({ message: 'Error fetching availability' });
+    res.status(500).json({ message: 'Error fetching availability', date, fieldId });
   }
 });
 
@@ -69,6 +69,7 @@ router.post('/book/:fieldId/:slot_id', async (req, res) => {
     if (isBooked(availableSlots, slot_id)){
         return res.json({message: "slot booked"});
     }
+
 
 })
 
