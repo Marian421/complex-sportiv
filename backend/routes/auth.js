@@ -4,8 +4,8 @@ const pool = require('../db');
 const hash = require('../utils/hash');
 const jwt = require('jsonwebtoken');
 const generateResetCode = require('../utils/generateResetCode');
-const sendResetEmail = require('../utils/sendResetEmail');
-const authenticateToken = require('../utils/authenticateToken');
+const sendResetEmail = require('../emails/sendResetEmail');
+const authenticateToken = require('../middleware/authenticateToken');
 
 router.post("/register", async(req, res) => {
     try {
@@ -45,7 +45,7 @@ router.post("/login", async(req, res) => {
             return res.json({message: "email not found"});
         }
         
-        const token = jwt.sign({ userId: user.rows[0].id },
+        const token = jwt.sign({ userId: user.rows[0].id, role: user.rows[0].role, email },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );

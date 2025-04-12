@@ -5,6 +5,9 @@ const multer = require('multer');
 const path = require('path');
 const getAvailableSlots = require('../utils/getAvailableSlots');
 const isBooked = require('../utils/isBooked');
+const authenticateToken = require('../middleware/authenticateToken');
+const checkAdminRole = require('../middleware/checkAdminRole');
+const sendReservationConfirmation = require('../emails/sendReservationEmail');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -29,7 +32,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.post('/add', upload.single('image'), async (req, res) => {
+router.post('/add', authenticateToken, checkAdminRole, upload.single('image'), async (req, res) => {
   try {
     const { name, description, location, price_per_hour } = req.body;
     const imagePath = `/uploads/fields/${req.file.filename}`;
@@ -60,9 +63,10 @@ router.get('/:fieldId/availability', async (req, res) => {
   }
 });
 
-router.post('/book/:fieldId/:slot_id', async (req, res) => {
+router.post('/book/:fieldId/:slot_id', authenticateToken, async (req, res) => {
     const { fieldId, slot_id } = req.params;
     const { date } = req.query;
+    const { userId, email } = req.user;
 
     const availableSlots = await getAvailableSlots(fieldId, date);
 
@@ -70,6 +74,12 @@ router.post('/book/:fieldId/:slot_id', async (req, res) => {
         return res.json({message: "slot booked"});
     }
 
+    const newBooking = await pool.query(
+      "insert into reservations (user_id, field_id, reservation_date, time_slot_id, status) values ($1,$2,$3,$4,'pending')",
+      [userId, fieldId, date, slot_id,]
+    )
+
+    const confirmationSent = sendReservationConfirmation(email, )
 
 })
 
