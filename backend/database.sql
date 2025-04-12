@@ -25,7 +25,7 @@ CREATE TABLE reservations (
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     field_id INT REFERENCES fields(id) ON DELETE CASCADE,
     reservation_date DATE NOT NULL,  
-    time_slot_id INT REFERENCES time_slots(id) ON DELETE CASCADE,  -- Foreign key to time_slots
+    time_slot_id INT REFERENCES time_slots(id) ON DELETE CASCADE, 
     status VARCHAR(20) DEFAULT 'pending',  
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

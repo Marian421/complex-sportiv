@@ -19,7 +19,7 @@ const getAvailableSlots = async (fieldId, date) => {
     return result.rows;
   } catch (error) {
     console.error('Error fetching available slots:', error);
-    throw error;  // Let the controller handle the error
+    throw error; 
   }
 };
 
