@@ -4,7 +4,6 @@ const pool = require('../db');
 const multer = require('multer');
 const path = require('path');
 const getAvailableSlots = require('../utils/getAvailableSlots');
-const isBooked = require('../utils/isBooked');
 const authenticateToken = require('../middleware/authenticateToken');
 const checkAdminRole = require('../middleware/checkAdminRole');
 const sendReservationConfirmation = require('../emails/sendReservationEmail');
@@ -29,6 +28,7 @@ router.get('/', async (req, res) => {
         res.json(fields.rows);
     } catch (err) {
        console.error(err.message); 
+       res.status(500).json({ message: "Server error while fetching fields" });
     }
 })
 
@@ -64,22 +64,46 @@ router.get('/:fieldId/availability', async (req, res) => {
 });
 
 router.post('/book/:fieldId/:slot_id', authenticateToken, async (req, res) => {
+  try {
     const { fieldId, slot_id } = req.params;
     const { date } = req.query;
     const { userId, email } = req.user;
 
-    const availableSlots = await getAvailableSlots(fieldId, date);
+    const existingReservation = await pool.query(
+      "select * from reservations where reservation_date=$1 and field_id=$2 and time_slot_id=$3",
+      [date, fieldId, slot_id]
+    );
 
-    if (isBooked(availableSlots, slot_id)){
-        return res.json({message: "slot booked"});
+    if(existingReservation.rowCount > 0){
+      return res.status(409).json({ message: "Slot is unavailable"});
     }
 
     const newBooking = await pool.query(
-      "insert into reservations (user_id, field_id, reservation_date, time_slot_id, status) values ($1,$2,$3,$4,'pending')",
+      `with new_res as(
+      insert into reservations (user_id, field_id, reservation_date, time_slot_id, status)
+      values($1, $2, $3, $4, 'pending')
+      returning *)
+      select new_res.*, f.name as field_name, t.slot_name
+      from new_res
+      join fields f on new_res.field_id = f.id
+      join time_slots t on new_res.time_slot_id = t.id`,
       [userId, fieldId, date, slot_id,]
     )
 
-    const confirmationSent = sendReservationConfirmation(email, )
+    const { fieldName, slotName} = newBooking.rows[0];
+
+    const confirmationSent = await sendReservationConfirmation(email, fieldName, date, slotName);
+
+    if(!confirmationSent){
+      return res.status(201).json({message: "Reservation created but failed to send confirmation email"});
+    }
+
+    res.status(201).json({message: "Reservation made and email sent"});
+
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: "Server error" });
+  }
 
 })
 

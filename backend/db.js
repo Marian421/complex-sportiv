@@ -9,8 +9,10 @@ const pool = new Pool({
     database: process.env.DB_NAME
 })
 
-pool.connect()
-  .then(() => console.log('Connected to the database!'))
-  .catch(err => console.error('Database connection error:', err.stack));
+if (process.env.NODE_ENV !== 'test'){
+  pool.connect()
+    .then(() => console.log('Connected to the database!'))
+    .catch(err => console.error('Database connection error:', err.stack));
+}
 
 module.exports = pool;

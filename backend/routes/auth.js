@@ -17,7 +17,7 @@ router.post("/register", async(req, res) => {
         )
 
         if (user.rowCount !== 0){
-            return res.json({message: "user already registered"});
+            return res.status(409).json({message: "user already registered"}); // 409 - conflict
         }
 
         const hashedPassword = hash.encrypt(password);
@@ -26,7 +26,10 @@ router.post("/register", async(req, res) => {
             "INSERT INTO users (name, email, password) VALUES ($1,$2,$3) RETURNING *",
             [name, email, hashedPassword]
         )
-        res.json(newUser.rows[0]);
+
+        const { password: _, ...userWithoutPassword } = newUser.rows[0];
+
+        res.json(userWithoutPassword);
     } catch (err) {
         console.error(err.message);
     }
@@ -42,7 +45,7 @@ router.post("/login", async(req, res) => {
         );
 
         if (user.rowCount === 0){
-            return res.json({message: "email not found"});
+            return res.status(401).json({message: "email not found"});
         }
         
         const token = jwt.sign({ userId: user.rows[0].id, role: user.rows[0].role, email },
@@ -55,7 +58,7 @@ router.post("/login", async(req, res) => {
         }
 
 
-        res.json({message: 'invalid password'});
+        res.status(401).json({message: 'invalid password'});
 
 
     } catch (err) {
@@ -72,7 +75,7 @@ router.post("/reset", async (req, res) => {
             [email]
         )
 
-        if (user.rows.length === 0) {
+        if (user.rowCount === 0) {
             return res.status(404).json({ message: "User not found" });
         }
 
@@ -81,7 +84,7 @@ router.post("/reset", async (req, res) => {
             [user.rows[0].id]
         );
 
-        if (existingResetCode.rows.length > 0) {
+        if (existingResetCode.rowCount > 0) {
             await pool.query(
                 "UPDATE reset_password SET used=true WHERE user_id=$1 AND used=false",
                 [user.rows[0].id]
@@ -101,8 +104,8 @@ router.post("/reset", async (req, res) => {
 
         if (!emailSent) {
             await pool.query(
-                "DELETE FROM reset_password WHERE id=&1",
-                [user.rows[0].id]
+                "DELETE FROM reset_password WHERE id=$1",
+                [newResetCode.rows[0].id]
             )
             return res.status(500).json({ message: "Failed to send reset email. Try again later." });
         }
@@ -124,8 +127,8 @@ router.post('/verify-reset-code', async (req, res) => {
           [code]
         );
     
-        if (result.rows.length === 0) {
-          return res.status(400).json({ message: "Invalid or expired reset code." });
+        if (result.rowCount === 0) {
+          return res.status(404).json({ message: "Invalid or expired reset code." });
         }
 
         const userId = result.rows[0].user_id;
@@ -154,7 +157,7 @@ router.post("/reset-password", authenticateToken, async(req,res) => {
             [hashedPassword, userId]
         );
 
-        if (result.rows.length === 0) {
+        if (result.rowCount === 0) {
             return res.status(404).json({ message: "User not found" });
         }
 
