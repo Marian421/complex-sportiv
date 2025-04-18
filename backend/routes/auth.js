@@ -54,7 +54,12 @@ router.post("/login", async(req, res) => {
         );
 
         if (hash.compare(password, user.rows[0].password)){
-            return res.json({message: "logged in succesfully", token})
+            res.cookie("token", token, {
+                httpOnly: true,
+                sameSite: "strict",
+                maxAge: 2 * 60 * 60 * 1000
+            });
+            return res.json({message: "logged in succesfully"})
         }
 
 
@@ -63,6 +68,7 @@ router.post("/login", async(req, res) => {
 
     } catch (err) {
         console.error(err.message);
+        res.status(500).json({ message: "Server Error" });
     }
 })
 

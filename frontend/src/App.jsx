@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AuthForm from "../components/AuthForm";
+import AuthForm from "./components/AuthForm";
 import NotFoundPage from "./pages/NotFoundPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import AddField from "./pages/AddField";
 import FieldPage from "./pages/FieldPage";
+import HomePage from "./pages/HomePage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Home Page</div>,
+    element: <HomePage />,
     errorElement: <NotFoundPage />
   },
   {

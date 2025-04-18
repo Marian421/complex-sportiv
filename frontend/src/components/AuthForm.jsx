@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../services/api";
 
 const AuthForm = ({ formType }) => {
-    const isRegister = formType === "register"; 
-
+    const isRegister = formType === "register";
+    const navigate = useNavigate(); 
+    const [errorMessage, setErrorMessage] = useState("");
     const [formData, setFormData] = useState({
         email: "",
         password: "",
         ...(isRegister && { name: "", confirmPassword: "" }) 
     });
-
     const [errors, setErrors] = useState({});
+
+    const passwordRef = useRef(null);
+
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -50,18 +55,16 @@ const AuthForm = ({ formType }) => {
         if (validateForm()) {
             console.log(`${formType} form submitted!`, formData);
             try {
-                const type = isRegister ? "register" : "login";
-                const response = await fetch(`http://localhost:5000/auth/${type}`, {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json",},
-                    body: JSON.stringify(formData),
-                })
-                const data = await response.json()
+                const response = isRegister ? await registerUser(formData) : await loginUser(formData);
     
                 if (response.ok){
-                    console.log("succes: ", data)
+                    setErrorMessage("");
+                    navigate('/');
                 } else {
-                    console.error("error: ", data.message)
+                    setErrorMessage("Wrong email or password");
+                    setFormData({ ...formData, password: "" });
+                    passwordRef.current.focus();
+                    console.log("error")
                 }
             } catch(error) {
                 console.error("Fetch error", error.message)
@@ -107,6 +110,7 @@ const AuthForm = ({ formType }) => {
                     name="password" 
                     value={formData.password} 
                     onChange={handleChange} 
+                    ref={passwordRef}
                 />
                 {errors.password && <p style={{ color: "red" }}>{errors.password}</p>}
             </div>
@@ -124,6 +128,8 @@ const AuthForm = ({ formType }) => {
                     {errors.confirmPassword && <p style={{ color: "red" }}>{errors.confirmPassword}</p>}
                 </div>
             )}
+
+            {errorMessage && (<p style={{ color: 'red' }}>{errorMessage}</p>)}  
 
             <button type="submit">{isRegister ? "Register" : "Login"}</button>
         </form>
