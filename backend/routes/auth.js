@@ -45,7 +45,7 @@ router.post("/login", async(req, res) => {
         );
 
         if (user.rowCount === 0){
-            return res.status(401).json({message: "email not found"});
+            return res.status(401).json({message: "Email not found"});
         }
         
         const token = jwt.sign({ userId: user.rows[0].id, role: user.rows[0].role, email },
@@ -63,7 +63,7 @@ router.post("/login", async(req, res) => {
         }
 
 
-        res.status(401).json({message: 'invalid password'});
+        res.status(401).json({message: 'Invalid password'});
 
 
     } catch (err) {
@@ -82,7 +82,7 @@ router.post("/reset", async (req, res) => {
         )
 
         if (user.rowCount === 0) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "There is no account with this email" });
         }
 
         const existingResetCode = await pool.query(
@@ -139,10 +139,15 @@ router.post('/verify-reset-code', async (req, res) => {
 
         const userId = result.rows[0].user_id;
         const resetToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.cookie("token", resetToken, {
+            httpOnly: true,
+            sameSite: "lax",
+            maxAge: 60 * 60 * 1000, 
+        });
     
         res.json({ 
-            message: "Code is valid, proceed with password reset.",
-            resetToken
+            message: "Code is valid, proceed with password reset."
          });
     
       } catch (err) {
@@ -169,12 +174,39 @@ router.post("/reset-password", authenticateToken, async(req,res) => {
 
         await pool.query("UPDATE reset_password SET used = true WHERE user_id = $1", [userId]);
 
+        res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "strict",
+        });
+
         res.json({ message: "Password successfully updated!" });
     } catch (err) {
         console.error("Error during password reset:", err.message);
         res.status(500).json({ message: "Server error during password reset" });
     }
-})
+});
+
+router.get('/me', authenticateToken, async (req, res) => {
+  try {
+    const { userId } = req.user;
+
+    const result = await pool.query(
+      "SELECT id, name, email, role FROM users WHERE id=$1",
+      [userId]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(result.rows[0]);
+
+  } catch (err) {
+    console.error("Error fetching user:", err.message);
+    res.status(500).json({ message: "Server error fetching user info" });
+  }
+});
+
 
 
 module.exports = router;

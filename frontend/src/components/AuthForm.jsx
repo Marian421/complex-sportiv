@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/api";
 
 const AuthForm = ({ formType }) => {
@@ -67,7 +67,8 @@ const AuthForm = ({ formType }) => {
                     console.log("error")
                 }
             } catch(error) {
-                console.error("Fetch error", error.message)
+                console.error("Fetch error", error.message);
+                setErrorMessage(error.message);
             }
         }
     };
@@ -126,6 +127,12 @@ const AuthForm = ({ formType }) => {
                         onChange={handleChange} 
                     />
                     {errors.confirmPassword && <p style={{ color: "red" }}>{errors.confirmPassword}</p>}
+                </div>
+            )}
+
+            {!isRegister && (
+                <div>
+                    <Link to='/reset/forgot-password'>Forgot your password?</Link>
                 </div>
             )}
 

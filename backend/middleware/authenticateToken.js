@@ -1,16 +1,14 @@
 const jwt = require('jsonwebtoken');
 
-// used for authorization, it takes the token from the authorization and checks if it's valid
-
 const authenticateToken = (req, res, next) => {
-    const token = req.header("Authorization");
+    const token = req.cookies.token;
 
     if (!token) {
         return res.status(401).json({ message: "Access denied, token missing" });
     }
 
     try {
-        const verified = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
         req.user = verified;
         next();
     } catch (err) {

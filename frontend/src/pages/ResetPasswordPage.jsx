@@ -9,21 +9,18 @@ const ResetPasswordPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [success, setSuccess] = useState(false);
-  const [resetToken, setResetToken] = useState("");
 
   useEffect(() => {
     const verifyCode = async () => {
       const res = await fetch("http://localhost:5000/auth/verify-reset-code", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code }),
       });
 
-      const data = await res.json();
-
       if ( res.status === 200) {
         setIsValid(true);
-        setResetToken(data.resetToken);
       } else {
         setIsValid(false);
       }
@@ -42,20 +39,26 @@ const ResetPasswordPage = () => {
       return;
     }
 
+    try {
+      const res = await fetch("http://localhost:5000/auth/reset-password", {
+        method: "POST",
+        credentials: "include",
+        headers: { 
+          "Content-Type": "application/json"
+       },
+        body: JSON.stringify({ newPassword })
+      });
 
-    const res = await fetch("http://localhost:5000/auth/reset-password", {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${resetToken}`
-     },
-      body: JSON.stringify({ newPassword }),
-    });
-
-    if (res.ok) {
-      setSuccess(true);
-    } else {
-      alert("Failed to reset password.");
+      const data = await res.json();
+  
+      if (res.ok) {
+        setSuccess(true);
+      } else {
+        throw new Error(data.message)
+      }
+      
+    } catch (error) {
+      console.error(error.message);
     }
   };
 

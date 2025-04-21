@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
+import { fetchFields } from "../services/api";
 
 const FieldsList = () => {
   const [fields, setFields] = useState([]);
 
-  useEffect(() => {
-    const fetchFields = async () => {
-      const res = await fetch("http://localhost:5000/fields");
-      const data = await res.json();
-      setFields(data);
-    };
-
-    fetchFields();
+  useEffect(async () => {
+    const response = await fetchFields();
+    const data = await response.json();
+    setFields(data);
   }, []);
 
   return (

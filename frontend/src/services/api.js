@@ -1,9 +1,15 @@
+
 const BASE_URL = "http://localhost:5000";
 
 const fetchData = async (url, options = {}) => {
   try {
     const response = await fetch(`${BASE_URL}${url}`, options);
-    //if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+
+    if (!response.ok) {
+      const errorData = await response.json(); 
+      throw new Error(errorData.message || `Error: ${response.statusText}`);
+    }
+
     return response;
   } catch (error) {
     console.error("API Error:", error.message);
@@ -29,4 +35,18 @@ export const registerUser = async (formData) => {
   };
 
   return fetchData("/auth/register", options);
+}
+
+export const forgotPassword = async (email) => {
+  const options = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({email})
+  };
+
+  return fetchData("/auth/reset", options);
+}
+
+export const fetchFields = async () => {
+  return fetchData("/fields")
 }
