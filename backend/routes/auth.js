@@ -176,7 +176,7 @@ router.post("/reset-password", authenticateToken, async(req,res) => {
 
         res.clearCookie("token", {
             httpOnly: true,
-            sameSite: "strict",
+            sameSite: "lax",
         });
 
         res.json({ message: "Password successfully updated!" });
@@ -207,6 +207,13 @@ router.get('/me', authenticateToken, async (req, res) => {
   }
 });
 
+router.post('/logout', (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "strict"
+  });
 
+  res.json({ message: "Logged out successfully" });
+});
 
 module.exports = router;

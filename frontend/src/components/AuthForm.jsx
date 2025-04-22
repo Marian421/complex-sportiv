@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { loginUser } from "../services/api";
+import { useAuth } from "../contexts/AuthContext";
 
 const AuthForm = ({ formType }) => {
     const isRegister = formType === "register";
@@ -12,6 +13,7 @@ const AuthForm = ({ formType }) => {
         ...(isRegister && { name: "", confirmPassword: "" }) 
     });
     const [errors, setErrors] = useState({});
+    const { login } = useAuth();
 
     const passwordRef = useRef(null);
 
@@ -55,21 +57,24 @@ const AuthForm = ({ formType }) => {
         if (validateForm()) {
             console.log(`${formType} form submitted!`, formData);
             try {
-                const response = isRegister ? await registerUser(formData) : await loginUser(formData);
-    
-                if (response.ok){
+                if (isRegister) {
+                  const response = await registerUser(formData);
+                  
+                  if (response.ok) {
                     setErrorMessage("");
                     navigate('/');
+                  } 
                 } else {
-                    setErrorMessage("Wrong email or password");
-                    setFormData({ ...formData, password: "" });
-                    passwordRef.current.focus();
-                    console.log("error")
+                  await login(formData); 
+                  setErrorMessage("");
+                  navigate('/');
                 }
-            } catch(error) {
+              } catch (error) {
                 console.error("Fetch error", error.message);
                 setErrorMessage(error.message);
-            }
+                setFormData({ ...formData, password: "" });
+                passwordRef.current.focus();
+              }
         }
     };
 

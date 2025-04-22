@@ -21,7 +21,8 @@ export const loginUser = async (formData) => {
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData)
+    body: JSON.stringify(formData),
+    credentials: "include"
   };
 
   return fetchData("/auth/login", options);
@@ -45,6 +46,44 @@ export const forgotPassword = async (email) => {
   };
 
   return fetchData("/auth/reset", options);
+}
+
+export const verifyResetCode = async (code) => {
+  const options = {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code }),
+  };
+
+  return fetchData("/auth/verify-reset-code", options)
+}
+
+export const resetPassword = async (newPassword) => {
+  const options = {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ newPassword }),
+  };
+
+  return fetchData("/auth/reset-password", options);
+}
+
+export const getCurrentUser = async () => {
+  const options = {
+    credentials: "include"
+  }
+  return fetchData("/auth/me", options);
+}
+
+export const handleLogout = async () => {
+  const options = {
+    method : "POST",
+    credentials : "include"
+  }
+
+  return fetchData("/auth/logout", options);
 }
 
 export const fetchFields = async () => {

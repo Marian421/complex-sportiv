@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { resetPassword, verifyResetCode } from "../services/api";
 
 const ResetPasswordPage = () => {
   const [searchParams] = useSearchParams();
@@ -11,25 +12,19 @@ const ResetPasswordPage = () => {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    const verifyCode = async () => {
-      const res = await fetch("http://localhost:5000/auth/verify-reset-code", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code }),
-      });
-
-      if ( res.status === 200) {
+    try {
+      const verifyCode = async () => {
+        await verifyResetCode(code);
+        
         setIsValid(true);
+      }
+      if (code) {
+        verifyCode();
       } else {
         setIsValid(false);
       }
-    };
-
-    if (code) {
-      verifyCode();
-    } else {
-      setIsValid(false);
+    } catch (error) {
+      console.error(error.message)
     }
   }, [code]);
 
@@ -40,22 +35,9 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:5000/auth/reset-password", {
-        method: "POST",
-        credentials: "include",
-        headers: { 
-          "Content-Type": "application/json"
-       },
-        body: JSON.stringify({ newPassword })
-      });
+      await resetPassword(newPassword);
 
-      const data = await res.json();
-  
-      if (res.ok) {
-        setSuccess(true);
-      } else {
-        throw new Error(data.message)
-      }
+      setSuccess(true);
       
     } catch (error) {
       console.error(error.message);

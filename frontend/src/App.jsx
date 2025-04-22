@@ -8,7 +8,6 @@ import FieldPage from "./pages/FieldPage";
 import HomePage from "./pages/HomePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
-
 const router = createBrowserRouter([
   {
     path: "/",
