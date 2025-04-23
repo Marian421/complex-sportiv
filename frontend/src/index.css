@@ -13,6 +13,25 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.react-calendar {
+  background-color: white;
+  color: black;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.react-calendar__tile {
+  color: black;
+}
+
+.react-calendar__navigation {
+  color: black;
+}
+
+.react-calendar__navigation button {
+  color: black;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

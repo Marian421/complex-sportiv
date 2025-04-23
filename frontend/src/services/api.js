@@ -89,3 +89,8 @@ export const handleLogout = async () => {
 export const fetchFields = async () => {
   return fetchData("/fields")
 }
+
+export const timeSlots = async (fieldId, date) => {
+  const dateToUse = date || new Date().toISOString().split('T')[0];
+  return fetchData(`/fields/${fieldId}/availability/?date=${encodeURIComponent(dateToUse)}`);
+}

@@ -19,12 +19,12 @@ const HomePage = () => {
                 <button onClick={ () => handleNavigation("/register") }>Register</button>
                 </>
                 ) :
-                (<>
+                (
                 <button>Profile</button>
-                <button onClick={() => logout()}>Log out</button>
-                </>)
+                )
             }
-            <button onClick={ () => handleNavigation("/register") }>See fields</button>
+            <button onClick={ () => handleNavigation("/fields") }>See fields</button>
+            {user && <button onClick={() => logout()}>Log out</button>}
         </div>
     )
 }

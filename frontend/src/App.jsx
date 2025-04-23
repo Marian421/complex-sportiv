@@ -7,6 +7,7 @@ import AddField from "./pages/AddField";
 import FieldPage from "./pages/FieldPage";
 import HomePage from "./pages/HomePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import FieldDetails from "./pages/FieldDetails";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: '/reset/forgot-password',
     element: <ForgotPasswordPage />
+  }, 
+  {
+    path:'/fields/:fieldId',
+    element: <FieldDetails />
   }
 ]);
 
