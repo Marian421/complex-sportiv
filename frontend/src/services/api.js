@@ -94,3 +94,22 @@ export const timeSlots = async (fieldId, date) => {
   const dateToUse = date || new Date().toISOString().split('T')[0];
   return fetchData(`/fields/${fieldId}/availability/?date=${encodeURIComponent(dateToUse)}`);
 }
+
+export const bookField = async (fieldId, slotId, date) => {
+  const options = {
+    method : "POST",
+    credentials: "include"
+  }
+
+  return fetchData(`/fields/book/${fieldId}/${slotId}/?date=${encodeURIComponent(date)}`, options)
+}
+
+export const postField = async (data) => {
+  const options = {
+    method: "POST",
+    credentials: "include",
+    body: data
+  }
+
+  return fetchData("/fields/add", options)
+}

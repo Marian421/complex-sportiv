@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { fetchFields } from "../services/api";
 import FieldCard from "../components/FieldCard";
+import { useNavigate } from "react-router-dom";
+
 
 const FieldsList = () => {
   const [fields, setFields] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleFetch = async () => {
@@ -22,6 +25,7 @@ const FieldsList = () => {
   return (
     <div>
       <h2>Available Fields</h2>
+      <button onClick={() => navigate("/fields/addField")}>Add a field</button>
       <div className="fields-container">
         {fields.map((field) => (
           <FieldCard key={field.id} field={field} />

@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { loginUser } from "../services/api";
 import { useAuth } from "../contexts/AuthContext";
 
 const AuthForm = ({ formType }) => {
@@ -59,7 +58,7 @@ const AuthForm = ({ formType }) => {
             try {
                 if (isRegister) {
                   const response = await registerUser(formData);
-                  
+
                   if (response.ok) {
                     setErrorMessage("");
                     navigate('/');
@@ -138,12 +137,14 @@ const AuthForm = ({ formType }) => {
             {!isRegister && (
                 <div>
                     <Link to='/reset/forgot-password'>Forgot your password?</Link>
+                    <Link to='/register'>Don't have an account?</Link>
                 </div>
             )}
 
             {errorMessage && (<p style={{ color: 'red' }}>{errorMessage}</p>)}  
 
-            <button type="submit">{isRegister ? "Register" : "Login"}</button>
+            <button type="button" onClick={() => navigate('/')}>Cancel</button>
+            <button type="submit">{isRegister ? "Register" : "Sign in"}</button>
         </form>
     );
 };

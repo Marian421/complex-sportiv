@@ -90,9 +90,9 @@ router.post('/book/:fieldId/:slot_id', authenticateToken, async (req, res) => {
       [userId, fieldId, date, slot_id,]
     )
 
-    const { fieldName, slotName} = newBooking.rows[0];
+    const { field_name, slot_name} = newBooking.rows[0];
 
-    const confirmationSent = await sendReservationConfirmation(email, fieldName, date, slotName);
+    const confirmationSent = await sendReservationConfirmation(email, field_name, date, slot_name);
 
     if(!confirmationSent){
       return res.status(201).json({message: "Reservation created but failed to send confirmation email"});

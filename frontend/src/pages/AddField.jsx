@@ -1,6 +1,10 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
+import { postField } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const AddField = () => {
+  const { user } = useAuth();
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -25,14 +29,15 @@ const AddField = () => {
       data.append(key, formData[key]);
     });
 
-    const res = await fetch('http://localhost:5000/fields/add', {
-      method: 'POST',
-      body: data,
-    });
+    try {
+      await postField(data);
+    } catch (error) {
+      console.error(error.message)
+    }
 
-    const result = await res.json();
-    console.log(result);
   };
+
+  if (!user || user.role !== "admin") return <p>You have to be an admin</p>
 
   return (
     <form onSubmit={handleSubmit}>
