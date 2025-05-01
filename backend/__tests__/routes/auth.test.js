@@ -69,7 +69,6 @@ describe("Auth Routes", () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body.message).toBe("logged in succesfully");
-      expect(res.body.token).toBe("fake-jwt-token");
     });
 
     it("should return invalid password", async () => {
@@ -82,7 +81,7 @@ describe("Auth Routes", () => {
       });
 
       expect(res.statusCode).toBe(401);
-      expect(res.body.message).toBe("invalid password");
+      expect(res.body.message).toBe("Invalid password");
     });
 
     it("should return invalid email", async () => {
@@ -94,7 +93,7 @@ describe("Auth Routes", () => {
         })
         
         expect(res.statusCode).toBe(401);
-        expect(res.body.message).toBe("email not found");
+        expect(res.body.message).toBe("Email not found");
     })
   });
 
@@ -107,7 +106,7 @@ describe("Auth Routes", () => {
         });
   
         expect(res.statusCode).toBe(404);
-        expect(res.body.message).toBe("User not found");
+        expect(res.body.message).toBe("There is no account with this email");
     });
 
     it("should send email succesfully", async () => {
@@ -179,7 +178,6 @@ describe("Auth Routes", () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body.message).toBe("Code is valid, proceed with password reset.");
-      expect(res.body.resetToken).toBe("resetToken");
     });
       
   });

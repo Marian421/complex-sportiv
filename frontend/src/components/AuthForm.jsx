@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { registerUser } from "../services/api";
 
 const AuthForm = ({ formType }) => {
     const isRegister = formType === "register";

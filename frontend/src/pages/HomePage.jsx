@@ -20,7 +20,7 @@ const HomePage = () => {
                 </>
                 ) :
                 (
-                <button>Profile</button>
+                <button onClick={ () => handleNavigation("/profile")}>Profile</button>
                 )
             }
             <button onClick={ () => handleNavigation("/fields") }>See fields</button>

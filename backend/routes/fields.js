@@ -107,5 +107,25 @@ router.post('/book/:fieldId/:slot_id', authenticateToken, async (req, res) => {
 
 })
 
+router.get("/reservations-history", authenticateToken, async (req, res) => {
+  try {
+    const { userId } = req.user;
+
+    const reservations = await pool.query(
+      "select * from reservations where user_id=$1",
+      [userId]
+    )
+
+    res.json(reservations.rows);
+
+
+  } catch(error){
+    console.error(error.message);
+    res.status(500).json({ message: "Server error" });
+  }
+
+
+})
+
 
 module.exports = router;

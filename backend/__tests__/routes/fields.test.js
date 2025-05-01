@@ -169,7 +169,7 @@ describe("Fields routes", () => {
 
             pool.query
                 .mockResolvedValueOnce({ rowCount: 0 })
-                .mockResolvedValueOnce({ rows: [{fieldName: 'name of field', slotName: 'name of slot'}] })
+                .mockResolvedValueOnce({ rows: [{field_name: 'name of field', slot_name: 'name of slot'}] })
             
             sendReservationConfirmation.mockResolvedValueOnce(0);
 
@@ -187,7 +187,7 @@ describe("Fields routes", () => {
 
             pool.query
                 .mockResolvedValueOnce({ rowCount: 0 })
-                .mockResolvedValueOnce({ rows: [{fieldName: 'name of field', slotName: 'name of slot'}] })
+                .mockResolvedValueOnce({ rows: [{field_name: 'name of field', slot_name: 'name of slot'}] })
             
             sendReservationConfirmation.mockResolvedValueOnce(1);
 

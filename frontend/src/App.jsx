@@ -8,6 +8,7 @@ import FieldPage from "./pages/FieldPage";
 import HomePage from "./pages/HomePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import FieldDetails from "./pages/FieldDetails";
+import ProfilePage from "./pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path:'/fields/:fieldId',
     element: <FieldDetails />
+  }, 
+  {
+    path: '/profile',
+    element: <ProfilePage />
   }
 ]);
 

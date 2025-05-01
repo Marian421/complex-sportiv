@@ -216,4 +216,29 @@ router.post('/logout', (req, res) => {
   res.json({ message: "Logged out successfully" });
 });
 
+router.delete("/delete-account", authenticateToken, async (req, res) => {
+    try {
+      const { userId } = req.user;
+  
+      const result = await pool.query(
+        "DELETE FROM users WHERE id = $1",
+        [userId]
+      );
+  
+      if (result.rowCount === 0) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.clearCookie("token", {
+        httpOnly: true,
+        sameSite: "strict"
+      });
+  
+      res.json({ message: "Account deleted successfully" });
+    } catch (error) {
+      console.error("Failed to delete account:", error);
+      res.status(500).json({ message: "Failed to delete account" });
+    }
+});
+
 module.exports = router;
