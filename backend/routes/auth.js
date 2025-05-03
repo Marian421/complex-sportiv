@@ -229,11 +229,6 @@ router.delete("/delete-account", authenticateToken, async (req, res) => {
         return res.status(404).json({ message: "User not found" });
       }
 
-      res.clearCookie("token", {
-        httpOnly: true,
-        sameSite: "strict"
-      });
-  
       res.json({ message: "Account deleted successfully" });
     } catch (error) {
       console.error("Failed to delete account:", error);

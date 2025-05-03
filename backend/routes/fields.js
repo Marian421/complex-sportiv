@@ -112,7 +112,20 @@ router.get("/reservations-history", authenticateToken, async (req, res) => {
     const { userId } = req.user;
 
     const reservations = await pool.query(
-      "select * from reservations where user_id=$1",
+      `select
+        r.reservation_date,
+        r.created_at,
+        t.slot_name,
+        f.name as field_name,
+        f.price_per_hour
+      from
+        reservations r
+      join
+        fields f on r.field_id=f.id
+      join 
+        time_slots t on r.time_slot_id=t.id
+      where
+        r.user_id=$1`,
       [userId]
     )
 

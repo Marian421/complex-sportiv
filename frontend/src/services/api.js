@@ -113,3 +113,21 @@ export const postField = async (data) => {
 
   return fetchData("/fields/add", options)
 }
+
+export const deleteUser = async () => {
+  const options = {
+    method: "DELETE",
+    credentials: "include"
+  }
+
+  return fetchData("/auth/delete-account", options);
+}
+
+export const getReservations = async () => {
+  const options = {
+    method: "GET",
+    credentials: "include"
+  }
+
+  return fetchData("/fields/reservations-history", options);
+}
