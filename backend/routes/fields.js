@@ -114,6 +114,7 @@ router.get("/reservations-history", authenticateToken, async (req, res) => {
     const reservations = await pool.query(
       `select
         r.reservation_date,
+        r.id,
         r.created_at,
         t.slot_name,
         f.name as field_name,
