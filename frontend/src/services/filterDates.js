@@ -29,7 +29,7 @@ const filterDates = (reservations, dateFilter) => {
             case "past":
                 return resDate.isBefore(today, 'day');
             case "upcoming":
-                return resDate.isAfter(today, 'day');
+                return resDate.isAfter(today);
             default:
                 console.error("Invalid date filter:", dateFilter);
                 return true; 

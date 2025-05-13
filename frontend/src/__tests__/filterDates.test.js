@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 
 describe("filterDates", () => {
-    const today = dayjs();
+    const today = dayjs().add(30, "minutes");
     const tomorrow = today.add(1, 'day');
     const yesterday = today.subtract(1, 'day');
 
@@ -26,8 +26,9 @@ describe("filterDates", () => {
         expect(filterDates(reservations, "all")).toEqual(reservations);
     })
 
-    it("should return tomorrow date", () => {
-        expect(filterDates(reservations, "upcoming")[0]).toEqual(reservations[1])
+    it("should return upcoming reservations", () => {
+        expect(filterDates(reservations, "upcoming")[0]).toEqual(reservations[0]);
+        expect(filterDates(reservations, "upcoming")[1]).toEqual(reservations[1]);
     })
 
     it("should return yesterday date", () => {

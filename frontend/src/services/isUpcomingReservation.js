@@ -1,7 +1,11 @@
 import dayjs from 'dayjs';
 
 const isUpcomingReservation = (reservationDate) => {
-  return dayjs(reservationDate).isAfter(dayjs(), 'hour');
+  const now = dayjs();
+  const reservationTime = dayjs(reservationDate);
+
+  // if the reservation is less than 30 minutes away => false
+  return reservationTime.diff(now, 'minutes') >= 30;
 };
 
 export default isUpcomingReservation;
