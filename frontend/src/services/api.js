@@ -131,3 +131,12 @@ export const getReservations = async () => {
 
   return fetchData("/fields/reservations-history", options);
 }
+
+export const cancelReservation = async (reservationId) => {
+  const options = {
+    method: "DELETE",
+    credentials: "include"
+  }
+
+  return fetchData(`/fields/cancel-reservation/${reservationId}`, options)
+}

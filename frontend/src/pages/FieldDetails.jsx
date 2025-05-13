@@ -7,6 +7,7 @@ import { bookField, timeSlots } from "../services/api";
 import TimeSlotCard from "../components/TimeSlotCard";
 import Modal from "react-modal";
 import { useAuth } from "../contexts/AuthContext";
+import dayjs from "dayjs";
 
 
 const FieldDetails = () => {
@@ -40,7 +41,6 @@ const FieldDetails = () => {
   const handleDateChange = (date) => {
     setSelectedDate(date);
     setShowCalendar(false);
-    fetchTimeSlots(fieldId, date.toISOString().split('T')[0]);
   };
 
   const toggleCalendar = () =>{
@@ -51,9 +51,7 @@ const FieldDetails = () => {
     console.log(">>> FETCHING SLOTS FOR FIELD:", fieldId);
     console.log(">>> RAW selectedDate:", date);
     console.log(">>> TO STRING:", typeof date === "string" ? date : date.toISOString());
-    const dateToUse = (typeof date === "string")
-      ? date
-      : date.toLocaleDateString("en-CA");
+    const dateToUse = dayjs(date).format('YYYY/MM/DD');
     console.log("date to use inside fetchTimeSlots", dateToUse);
     try {
       const response = await timeSlots(fieldId, dateToUse);
@@ -67,7 +65,7 @@ const FieldDetails = () => {
   };
 
   const handleBooking = async () => {
-    const dateToUse = selectedDate.toISOString().split('T')[0];
+    const dateToUse = dayjs(selectedDate).format('YYYY/MM/DD');
     try {
       setLoading(true);
       await bookField(fieldId, selectedSlot.slot_id, dateToUse);
@@ -83,7 +81,8 @@ const FieldDetails = () => {
   };
 
   useEffect(() => {
-    fetchTimeSlots(fieldId, selectedDate);
+    const formattedDate = dayjs(selectedDate).format("YYYY-MM-DD");
+    fetchTimeSlots(fieldId, formattedDate);
   }, [fieldId, selectedDate]);
 
   if (!field) return <p>Missing field details</p>;
@@ -114,7 +113,7 @@ const FieldDetails = () => {
           </div>
       )}
 
-      <h3>Available Time Slots for {selectedDate.toDateString()}:</h3>
+      <h3>Available Time Slots for {dayjs(selectedDate).format("dddd, MMMM D, YYYY")}:</h3>
 
       <ul>
         {timeSlotsAvailability && timeSlotsAvailability.length > 0 ? (

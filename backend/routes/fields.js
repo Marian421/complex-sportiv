@@ -7,6 +7,7 @@ const getAvailableSlots = require('../utils/getAvailableSlots');
 const authenticateToken = require('../middleware/authenticateToken');
 const checkAdminRole = require('../middleware/checkAdminRole');
 const sendReservationConfirmation = require('../emails/sendReservationEmail');
+const checkValidCancel = require('../utils/checkValidCancel');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -138,7 +139,46 @@ router.get("/reservations-history", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 
+})
 
+router.delete("/cancel-reservation/:reservationId", authenticateToken, async (req, res) => {
+  try {
+    const {  reservationId } = req.params;
+  
+    const reservationsDetails = await pool.query(
+      `select
+        r.reservation_date,
+        t.start_time
+      from 
+        reservations r
+      join 
+        time_slots t on r.time_slot_id=t.id
+      where 
+        r.id=$1`,
+      [reservationId]
+    )
+
+    if (reservationsDetails.rowCount === 0){
+      return res.status(404).json({ message: "Invalid reservation id" });
+    }
+
+    const reservationDate = reservationsDetails.rows[0].reservation_date;
+    const startTime = reservationsDetails.rows[0].start_time;
+    
+    if(!checkValidCancel(reservationDate, startTime)){
+      return res.status(404).json({ message: "Can't cancel reservation" });
+    }
+
+    const deleteReservation = await pool.query(
+      'delete from reservations where id=$1',
+      [reservationId]
+    )
+  
+    res.json(reservationsDetails.rows); 
+  } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: "Server error" });
+  }
 })
 
 

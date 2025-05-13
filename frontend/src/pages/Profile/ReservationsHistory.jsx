@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getReservations } from "../../services/api";
+import { cancelReservation, getReservations } from "../../services/api";
 import formatDate from "../../services/formatDate";
 import ReservationCard from "../../components/ReservationCard";
 import filterDates from "../../services/filterDates";
@@ -25,9 +25,14 @@ const ReservationsHistory = () => {
         handleFetch();
     }, [])
 
-   // const handleCancel = () => {
-
-   // }
+    const handleCancel = async (reservationId) => {
+        try {
+            await cancelReservation(reservationId);
+            setReservations((prev) => prev.filter(res => res.id !== reservationId));
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
 
     return (
         <div>
@@ -46,7 +51,12 @@ const ReservationsHistory = () => {
 
             <div>
                 {filterdReservations.map((reservation) => (
-                    <ReservationCard key={reservation.id} reservation={reservation}></ReservationCard>
+                    <ReservationCard
+                        key={reservation.id}
+                        reservation={reservation}
+                        onCancel={ () => handleCancel(reservation.id) }
+                    />
+                    
                 ))}
             </div> 
         </div>
