@@ -1,15 +1,12 @@
 import getTotalPrice from "../services/getTotalPrice";
 import formatDate from "../services/formatDate";
 import isUpcomingReservation from "../services/isUpcomingReservation";
-import dayjs from "dayjs";
 
 const ReservationCard = ({ reservation, onCancel }) => {
     const totalPrice = getTotalPrice(reservation.price_per_hour);
     const createdDate = formatDate(reservation.created_at);
     const reservationDate = formatDate(reservation.reservation_date);
-    const dateToUse = dayjs(reservation.reservation_date).startOf('day').toISOString();
-    const showCancelButton = isUpcomingReservation(dateToUse);
-    console.log("reservationCard.jsx date: ", reservation.reservation_date);
+    const showCancelButton = isUpcomingReservation(reservation.reservation_date, reservation.slot_name);
 
     return (
         <div>

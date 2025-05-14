@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 
 const auth = require('./routes/auth.js');
 const fields = require('./routes/fields.js');
+const admin = require('./routes/admin.js');
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.use("/auth", auth);
 app.use("/fields", fields);
+app.use("/admin", admin)
 
 app.post("/register", (req, res) => {
   res.json("works")

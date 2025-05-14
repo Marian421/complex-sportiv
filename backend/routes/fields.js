@@ -119,7 +119,8 @@ router.get("/reservations-history", authenticateToken, async (req, res) => {
         r.created_at,
         t.slot_name,
         f.name as field_name,
-        f.price_per_hour
+        f.price_per_hour,
+        t.start_time
       from
         reservations r
       join

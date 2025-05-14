@@ -14,7 +14,12 @@ const filterDates = (reservations, dateFilter) => {
             return false;
         }
 
-        const resDate = dayjs(reservation.reservation_date);
+        const [hour, minute, second = 0] = reservation.start_time.split(":").map(Number);
+
+        const resDate = dayjs(reservation.reservation_date)
+            .set('hour', hour)
+            .set('minute', minute)
+            .set('second', second);
 
         if (!resDate.isValid()) {
             console.error("Invalid date format:", reservation.reservation_date);
@@ -27,9 +32,9 @@ const filterDates = (reservations, dateFilter) => {
             case "today":
                 return resDate.isSame(today, 'day');
             case "past":
-                return resDate.isBefore(today, 'day');
+                return resDate.isBefore(today, 'minutes');
             case "upcoming":
-                return resDate.isAfter(today);
+                return resDate.isAfter(today, 'minutes');
             default:
                 console.error("Invalid date filter:", dateFilter);
                 return true; 

@@ -2,6 +2,10 @@ import isUpcomingReservation from '../services/isUpcomingReservation';
 import dayjs from 'dayjs';
 
 describe('isUpcomingReservation', () => {
+  it('should call diff with correct paramaters', () => {
+    const today = dayjs().add(40, 'minutes').toISOString();
+    const timeInterval = "6:00 PM - 7:30 PM";
+  })
   it('should return true if the reservation date is in the future', () => {
     const futureDate = dayjs().add(1, 'day').toISOString(); 
     expect(isUpcomingReservation(futureDate)).toBe(true);

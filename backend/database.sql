@@ -27,7 +27,10 @@ CREATE TABLE reservations (
     reservation_date DATE NOT NULL,  
     time_slot_id INT REFERENCES time_slots(id) ON DELETE CASCADE, 
     status VARCHAR(20) DEFAULT 'pending',  
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    guest_name VARCHAR(100),
+    guest_phone VARCHAR(20),
+    created_by INT REFERENCES users(id);
 );
 
 
