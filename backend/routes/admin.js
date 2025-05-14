@@ -3,6 +3,20 @@ const router = express.Router();
 const pool = require('../db');
 const authenticateToken = require('../middleware/authenticateToken');
 const checkAdminRole = require('../middleware/checkAdminRole');
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/fields/');
+  },
+  filename: (req, file, cb) => {
+    const name = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, name + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({storage});
 
 router.post('/make-reservation', authenticateToken, checkAdminRole,  async (req, res) => {
 
@@ -92,7 +106,24 @@ router.put('/modify-field-details', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
-})
+});
+
+router.post('/add', authenticateToken, checkAdminRole, upload.single('image'), async (req, res) => {
+  try {
+    const { name, description, location, price_per_hour } = req.body;
+    const imagePath = `/uploads/fields/${req.file.filename}`;
+
+    const result = await pool.query(
+      'INSERT INTO fields (name, description, location, price_per_hour, image_path) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      [name, description, location, price_per_hour, imagePath]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Error adding field' });
+  }
+});
 
 
 
