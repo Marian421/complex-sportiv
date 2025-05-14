@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ReservationsHistory from "./ReservationsHistory";
 import DeleteAccount from "./DeleteAccount";
 
 const ProfilePage = () => {
-    const navigate = useNavigate();
     const [selectedOption, setSelectedOption] = useState('history');
 
     const renderContent = () => {

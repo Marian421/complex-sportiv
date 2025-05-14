@@ -3,12 +3,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthForm from "./components/AuthForm";
 import NotFoundPage from "./pages/NotFoundPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import AddField from "./pages/AddField";
+import AddField from "./pages/DashBoard/AddField";
 import FieldPage from "./pages/FieldPage";
 import HomePage from "./pages/HomePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import FieldDetails from "./pages/FieldDetails";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import DashBoard from "./pages/DashBoard/DashBoard";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <ProfilePage />
+  },
+  {
+    path: '/dashboard',
+    element: <DashBoard />
   }
 ]);
 

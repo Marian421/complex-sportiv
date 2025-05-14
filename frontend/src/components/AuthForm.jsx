@@ -65,9 +65,13 @@ const AuthForm = ({ formType }) => {
                     navigate('/');
                   } 
                 } else {
-                  await login(formData); 
+                  const user = await login(formData); 
                   setErrorMessage("");
-                  navigate('/');
+                  if (user.role === "admin"){
+                    navigate('/dashboard');
+                  } else {
+                    navigate('/');
+                  }
                 }
               } catch (error) {
                 console.error("Fetch error", error.message);

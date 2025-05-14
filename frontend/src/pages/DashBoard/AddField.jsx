@@ -1,6 +1,6 @@
 import { use, useState } from 'react';
-import { postField } from '../services/api';
-import { useAuth } from '../contexts/AuthContext';
+import { postField } from '../../services/api';
+import { useAuth } from '../../contexts/AuthContext';
 
 const AddField = () => {
   const { user } = useAuth();

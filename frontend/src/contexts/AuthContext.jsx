@@ -29,8 +29,10 @@ export function AuthProvider({ children }) {
   const login = async (credentials) => {
     try {
       await loginUser(credentials);
-      await fetchUser();
-      console.log(user);
+      const response = await getCurrentUser();
+      const data = await response.json();
+      setUser(data);
+      return data;
     } catch (error) {
       console.error("Login error", error.message);
       throw error; 

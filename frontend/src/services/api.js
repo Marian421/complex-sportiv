@@ -111,7 +111,7 @@ export const postField = async (data) => {
     body: data
   }
 
-  return fetchData("/admin/add", options)
+  return fetchData("/admin/add-field", options)
 }
 
 export const deleteUser = async () => {

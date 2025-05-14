@@ -108,7 +108,7 @@ router.put('/modify-field-details', async (req, res) => {
     }
 });
 
-router.post('/add', authenticateToken, checkAdminRole, upload.single('image'), async (req, res) => {
+router.post('/add-field', authenticateToken, checkAdminRole, upload.single('image'), async (req, res) => {
   try {
     const { name, description, location, price_per_hour } = req.body;
     const imagePath = `/uploads/fields/${req.file.filename}`;
