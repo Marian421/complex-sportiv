@@ -140,3 +140,14 @@ export const cancelReservation = async (reservationId) => {
 
   return fetchData(`/fields/cancel-reservation/${reservationId}`, options)
 }
+
+export const makeReservation = async (formData) => {
+  const options = {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData)
+  };
+
+  return fetchData('/admin/make-reservation', options);
+}

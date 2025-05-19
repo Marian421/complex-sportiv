@@ -22,12 +22,16 @@ router.post('/make-reservation', authenticateToken, checkAdminRole,  async (req,
 
     try {
         const { 
-            guestName,
-            guestPhone,
-            field_id,
-            reservation_date,
-            time_slot_id
+            guest_name,
+            guest_phone,
+            fieldId,
+            date,
+            slotId
         } = req.body;
+
+        if (!guest_name || !guest_phone || !fieldId || !date || !slotId) {
+          return res.status(400).json({ message: `Missing required fields ${guest_name} ${guest_phone} ${fieldId} ${date} ${slotId}` });
+        }
     
         const insertResult = await pool.query(
             `insert into reservations
@@ -35,7 +39,7 @@ router.post('/make-reservation', authenticateToken, checkAdminRole,  async (req,
              values
                 ($1, $2, $3, $4, $5)
              returning *`,
-             [guestName, guestPhone, field_id, reservation_date, time_slot_id]
+             [guest_name, guest_phone, fieldId, date, slotId]
         );
     
         res.json({data: insertResult.rows[0]});   
