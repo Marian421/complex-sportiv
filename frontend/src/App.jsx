@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AuthForm from "./components/AuthForm";
+import AuthForm from "./pages/AuthForm/AuthForm";
 import NotFoundPage from "./pages/NotFoundPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import AddField from "./pages/DashBoard/Views/AddField";

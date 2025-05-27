@@ -1,17 +1,39 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --color-bg-light: #f9fafb;
+  --color-bg-dark: #121212;
+  --color-text-light: #242424;
+  --color-text-dark: #e0e0e0;
+  --color-primary: #157a21;
+  --color-primary-hover: #0f5c19;
+  --color-cancel-hover: #e0e0e0;   
+  --color-delete-hover: #d9534f; 
+  --color-error: #e63946;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-size-base: 16px;
+  --border-radius: 6px;
+  --transition-speed: 0.3s;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  background-color: var(--color-bg-light);
+  color: var(--color-text-light);
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 
 .react-calendar {
   background-color: white;
@@ -33,20 +55,23 @@
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-speed);
 }
-a:hover {
-  color: #535bf2;
+
+a:hover,
+a:focus {
+  color: var(--color-primary-hover);
+  outline: none;
 }
 
 body {
-  margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
+  min-width: 320px;
 }
 
 h1 {
@@ -55,22 +80,55 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  border-radius: var(--border-radius);
+  border: none;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.6em 1.2em;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color var(--transition-speed);
 }
-button:hover {
-  border-color: #646cff;
+
+button[type="button"]:hover {
+  background-color: #e0e0e0; 
+  color: #157a21;            
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+button.delete:hover {
+  background-color: #d9534f; 
+  color: white;
+  border-color: #d9534f;
+}
+
+button:hover,
+button:focus {
+  background-color: var(--color-primary-hover);
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5em 0.75em;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  transition: border-color var(--transition-speed);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.3);
+}
+
+.error-message {
+  color: var(--color-error);
+  font-size: 0.875rem;
+  margin-top: 0;
 }
 
 @media (prefers-color-scheme: light) {

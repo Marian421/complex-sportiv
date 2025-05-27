@@ -1,0 +1,85 @@
+.form {
+  max-width: 400px;
+  margin: 5rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #157a21;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: #222;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: 2px solid #157a21;
+  border-color: #157a21;
+}
+
+button {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #157a21;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+button[type="button"] {
+  background-color: transparent;
+  color: #157a21;
+  border: 2px solid #157a21;
+  margin-top: 0.75rem;
+}
+
+button:hover {
+  background-color: #0f5c19;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.links a {
+  color: #157a21;
+  text-decoration: none;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  background-color: #f5f5f5; 
+  width: 100%;
+}
+
