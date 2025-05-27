@@ -151,3 +151,14 @@ export const makeReservation = async (formData) => {
 
   return fetchData('/admin/make-reservation', options);
 }
+
+export const seeReservations = async (data) => {
+  const queryParams = new URLSearchParams(data).toString();
+
+  const options = {
+    method: "GET",
+    credentials: "include"
+  };
+
+  return fetchData(`/admin/see-reservations?${queryParams}`, options);
+}

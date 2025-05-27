@@ -48,6 +48,41 @@ router.post('/make-reservation', authenticateToken, checkAdminRole,  async (req,
     }
 });
 
+router.get('/see-reservations', authenticateToken, checkAdminRole, async (req, res) => {
+    try {
+        const {
+            date,
+            fieldId
+        } = req.query;
+
+        const users = await pool.query(`
+            select
+                ts.id AS slot_id,
+                ts.slot_name,
+                u.name AS user_name,
+                u.email AS user_email,
+                r.id AS reservation_id,
+                r.guest_name,
+                r.guest_phone,
+                CASE WHEN r.id IS NULL THEN false ELSE true END AS isBooked
+            from time_slots ts
+            left join reservations r
+                on r.time_slot_id = ts.id
+                and r.field_id = $1
+                and r.reservation_date = $2
+            left join users u
+                on r.user_id = u.id           
+            `, [fieldId, date]
+        );
+
+        res.json(users.rows)
+
+
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
 router.delete('/delete-field', authenticateToken, checkAdminRole, async (req, res) => {
     try {
         const { field_id } = req.body;
