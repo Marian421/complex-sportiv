@@ -1,0 +1,36 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.navLinks {
+    display: flex;
+}
+
+.navLinks button {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-weight: 600;
+  width: fit-content;
+  margin-left: 1rem;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.navLinks button:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-dark);
+}

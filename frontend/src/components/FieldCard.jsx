@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import styles from "./styles/FieldCard.module.css"
 
 const FieldCard = ({ field }) => {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ const FieldCard = ({ field }) => {
   };
 
   return (
-    <div className="field-card">
+    <div className={ styles.fieldCard }>
       <h3>{field.name}</h3>
       <p>{field.description}</p>
       <p>Location: {field.location}</p>

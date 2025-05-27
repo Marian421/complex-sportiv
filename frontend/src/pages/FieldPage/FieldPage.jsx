@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { fetchFields } from "../services/api";
-import FieldCard from "../components/FieldCard";
-import { useNavigate } from "react-router-dom";
+import { fetchFields } from "../../services/api";
+import FieldCard from "../../components/FieldCard";
+import Navbar from "../../components/Navbar";
+import styles from "./FieldPage.module.css"
 
 
-const FieldsList = () => {
+const FieldPage = () => {
   const [fields, setFields] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const handleFetch = async () => {
@@ -23,10 +23,10 @@ const FieldsList = () => {
   }, []);
 
   return (
-    <div>
+    <div className={ styles.container }>
+      <Navbar />
       <h2>Available Fields</h2>
-      <button onClick={() => navigate("/fields/addField")}>Add a field</button>
-      <div className="fields-container">
+      <div className={ styles.fieldsContainer }>
         {fields.map((field) => (
           <FieldCard key={field.id} field={field} />
         ))}
@@ -35,4 +35,4 @@ const FieldsList = () => {
   );
 };
 
-export default FieldsList;
+export default FieldPage;

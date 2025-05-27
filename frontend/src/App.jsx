@@ -4,10 +4,10 @@ import AuthForm from "./pages/AuthForm/AuthForm";
 import NotFoundPage from "./pages/NotFoundPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import AddField from "./pages/DashBoard/Views/AddField";
-import FieldPage from "./pages/FieldPage";
-import HomePage from "./pages/HomePage";
+import FieldPage from "./pages/FieldPage/FieldPage";
+import HomePage from "./pages/HomePage/HomePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import FieldDetails from "./pages/FieldDetails";
+import FieldDetails from "./pages/FieldDetails/FieldDetails";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import DashBoard from "./pages/DashBoard/DashBoard";
 

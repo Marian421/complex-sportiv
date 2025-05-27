@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 import Calendar from 'react-calendar';
 import "react-calendar/dist/Calendar.css"; 
 import { RiCalendarLine } from "react-icons/ri";
-import { bookField, timeSlots } from "../services/api";
-import TimeSlotCard from "../components/TimeSlotCard";
+import { bookField, timeSlots } from "../../services/api";
+import TimeSlotCard from "../../components/TimeSlotCard";
 import Modal from "react-modal";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import dayjs from "dayjs";
-
+import styles from "./FieldDetails.module.css"
 
 const FieldDetails = () => {
   const { fieldId } = useParams();
@@ -88,7 +88,7 @@ const FieldDetails = () => {
   if (!field) return <p>Missing field details</p>;
 
   return (
-    <div>
+    <div className={ styles.fieldDetails }>
       <h2>{field.name}</h2>
       <p>{field.description}</p>
       <p>Location: {field.location}</p>
@@ -98,12 +98,12 @@ const FieldDetails = () => {
         alt={field.name}
         width="400"
       />
-      <button onClick={toggleCalendar} style={{ fontSize: "24px", border: "none", background: "none", cursor: "pointer" }}>
+      <button onClick={toggleCalendar}>
         <RiCalendarLine />
       </button>
 
       {showCalendar && (
-          <div style={{ position: "absolute", zIndex: 10 }}>
+          <div>
             <Calendar
               onChange={handleDateChange}
               value={selectedDate}
@@ -115,15 +115,15 @@ const FieldDetails = () => {
 
       <h3>Available Time Slots for {dayjs(selectedDate).format("dddd, MMMM D, YYYY")}:</h3>
 
-      <ul>
+      <div className={ styles.timeslotsContainer}>
         {timeSlotsAvailability && timeSlotsAvailability.length > 0 ? (
           timeSlotsAvailability.map((slot) => (
             <TimeSlotCard key={slot.slot_id} timeSlotDetails={slot} onBook={openModal}/>
           ))
         ) : (
-          <li>No available slots for this date</li>
+          <div>No available slots for this date</div>
         )}
-      </ul>
+      </div>
 
         <Modal
             isOpen={isModalOpen}
@@ -139,7 +139,7 @@ const FieldDetails = () => {
             },
             }}
             >
-            <h2 style={{color: "black"}}>Confirm Booking</h2>
+            <h2>Confirm Booking</h2>
             {selectedSlot && (
             <p>
                 Book <strong>{selectedSlot.slot_name}</strong> on{" "}
@@ -147,7 +147,7 @@ const FieldDetails = () => {
             </p>
             )}
             <button onClick={handleBooking}>Yes, Book it!</button>
-            <button onClick={closeModal} style={{ marginLeft: "10px" }}>
+            <button onClick={closeModal}>
             Cancel
             </button>
             {loading && <p style={{color: "black"}}>Loading...</p>}

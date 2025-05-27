@@ -1,7 +1,9 @@
+import styles from "./styles/TimeSlotCard.module.css"
+
 const TimeSlotCard = ({ timeSlotDetails, onBook }) => {
 
   return (
-    <div className="timeslot-card">
+    <div className={ styles.timeSlotCard }>
         <h2>{ timeSlotDetails.slot_name }</h2>
         <button 
         onClick={() => onBook(timeSlotDetails)}

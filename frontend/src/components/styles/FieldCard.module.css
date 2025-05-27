@@ -1,0 +1,50 @@
+.fieldCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  max-width: 350px;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fieldCard:hover {
+  transform: translateY(-5px);
+}
+
+.fieldCard img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.fieldCard h3 {
+  margin: 0.5rem 0;
+  color: var(--color-primary);
+  font-size: 1.25rem;
+}
+
+.fieldCard p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.fieldCard button {
+  margin-top: 1rem;
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fieldCard button:hover {
+  background-color: var(--color-primary-hover);
+}

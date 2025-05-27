@@ -1,0 +1,41 @@
+.timeSlotCard {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 250px;
+}
+
+.timeSlotCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.timeSlotCard h2 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #157a21;
+}
+
+.timeSlotCard button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #157a21;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.timeSlotCard button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.timeSlotCard button:not(:disabled):hover {
+  background-color: #0f5c19;
+}
