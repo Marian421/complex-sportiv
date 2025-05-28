@@ -1,0 +1,30 @@
+.userCard {
+  max-width: 300px;
+  margin: 1rem auto;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.userCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.time {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+} 
+
+p{
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-primary)
+}
+
+p span {
+    color: black;
+    font-weight: 100;
+}

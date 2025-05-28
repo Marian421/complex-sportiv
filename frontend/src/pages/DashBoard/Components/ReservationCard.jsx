@@ -1,8 +1,8 @@
+import styles from "./styles/ReservationCard.module.css"
+
 const ReservationCard = ({ reservationDetails }) => {
     return (
         <div className="reservationCardAdmin">
-            <h2>{ reservationDetails.slot_name }</h2>
-
             {reservationDetails.isbooked ? renderUserDetails(reservationDetails) : (<span>Is not booked</span>)}
         </div>
     );
@@ -14,16 +14,16 @@ const renderUserDetails = ( reservationDetails ) => {
     return (
         <>
             {isGuest ? (
-                <div>
-                    <h2>Guest</h2>
-                    <p>Name: { reservationDetails.guest_name }</p>
-                    <p>Phone number: { reservationDetails.guest_phone }</p>
+                <div className={ styles.userCard }>
+                    <h2 className={ styles.time }>{ reservationDetails.slot_name }</h2>
+                    <p>Name: <span>{ reservationDetails.guest_name } (guest)</span> </p>
+                    <p>Phone number: <span>{ reservationDetails.guest_phone }</span></p>
                 </div>
             ) : (
-                <div>
-                    <h2>User</h2>
-                    <p>Name: { reservationDetails.user_name }</p>
-                    <p>E-mail: { reservationDetails.user_email }</p>
+                <div className={ styles.userCard}>
+                    <h2 className={ styles.time }>{ reservationDetails.slot_name }</h2>
+                    <p>Name: <span>{ reservationDetails.user_name } (user)</span></p>
+                    <p>E-mail: <span>{ reservationDetails.user_email }</span></p>
                 </div>
             )}
         </>

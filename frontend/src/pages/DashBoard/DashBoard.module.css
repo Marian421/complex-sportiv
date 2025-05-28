@@ -1,4 +1,4 @@
-.profileContainer {
+.dashboardContainer {
     display: flex;
     height: 100vh;
 }
@@ -18,19 +18,6 @@
   font-size: 1.5rem;
   font-weight: bolder;
   z-index: 10;
-}
-
-.header span {
-    display: inline-block;
-}
-
-.goBack {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.8rem;
-  cursor: pointer;
 }
 
 .sidebar {

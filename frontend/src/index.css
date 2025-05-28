@@ -125,6 +125,10 @@ textarea:focus {
   box-shadow: 0 0 0 2px rgba(58, 134, 255, 0.3);
 }
 
+select:hover {
+  cursor: pointer;
+}
+
 .error-message {
   color: var(--color-error);
   font-size: 0.875rem;
