@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { deleteUser } from "../../services/api";
+import { deleteUser } from "../../../services/api";
 import { useState } from "react";
-import { useAuth } from "../../contexts/AuthContext"
+import { useAuth } from "../../../contexts/AuthContext"
+import styles from "./styles/DeleteAccount.module.css"
 
 const DeleteAccount = () => {
     const navigate = useNavigate();
@@ -19,15 +20,15 @@ const DeleteAccount = () => {
     }
     
     return (
-        <div>
+        <div className={ styles.container }>
             {errorMessage ? 
-                <p>errorMessage</p>
-                :
+                <p className={ styles.error-message }>errorMessage</p>
+            :
                 <>
-                <p>Are you sure you want to delete your account?</p>
-                <button onClick={ () => handleDelete() }>Yes, delete</button>
+                    <p className={ styles.message }>Are you sure you want to delete your account?</p>
+                    <button className={ styles.deleteButton } onClick={ () => handleDelete() }>Yes, delete</button>
                 </>
-                }
+            }
         </div>
     )
 }

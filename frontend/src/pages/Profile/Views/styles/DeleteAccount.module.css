@@ -1,0 +1,37 @@
+.container {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  max-width: 400px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.message {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: black;
+  font-weight:bold;
+}
+
+.error {
+  color: var(--color-error);
+  font-weight: bold;
+}
+
+.deleteButton {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  background-color: var(--color-delete);
+  color: white;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: var(--color-delete);
+  transform: translateY(-2px);
+}

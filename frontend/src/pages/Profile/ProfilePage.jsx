@@ -1,9 +1,13 @@
 import { useState } from "react";
-import ReservationsHistory from "./ReservationsHistory";
-import DeleteAccount from "./DeleteAccount";
+import ReservationsHistory from "./Views/ReservationsHistory";
+import DeleteAccount from "./Views/DeleteAccount";
+import styles from "./ProfilePage.module.css"
+import { FaArrowAltCircleLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
     const [selectedOption, setSelectedOption] = useState('history');
+    const navigate = useNavigate();
 
     const renderContent = () => {
         switch(selectedOption) {
@@ -14,13 +18,29 @@ const ProfilePage = () => {
     }
 
     return (
-        <div>
-            <header>Profile</header>
-            <aside>
-                <button onClick={ () => setSelectedOption("history") }>See reservations</button>
-                <button onClick={ ()=> setSelectedOption("delete") }>Delete account</button>
+        <div className={ styles.profileContainer }>
+            <header className={ styles.header }>
+                <FaArrowAltCircleLeft 
+                className={ styles.goBack }
+                onClick={() => navigate(-1)}
+                />
+                <span>Profile</span>
+            </header>
+            <aside className= {styles.sidebar}>
+                <button
+                   className={`${styles.sidebarButton} ${
+                        selectedOption === "history" ? styles.active : ""
+                    }`} 
+                    onClick={ () => setSelectedOption("history") }>
+                        See reservations
+                </button>
+                <button
+                 onClick={ ()=> setSelectedOption("delete") }
+                 className={`${selectedOption === "delete" && styles.active}`}>
+                    Delete account
+                </button>
             </aside>
-            <main>{ renderContent() }</main>
+            <main className={ styles.main }>{ renderContent() }</main>
         </div>
     )
 }

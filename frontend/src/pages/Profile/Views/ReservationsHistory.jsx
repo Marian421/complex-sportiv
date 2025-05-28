@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { cancelReservation, getReservations } from "../../services/api";
-import formatDate from "../../services/formatDate";
-import ReservationCard from "../../components/ReservationCard";
-import filterDates from "../../services/filterDates";
+import { cancelReservation, getReservations } from "../../../services/api";
+import formatDate from "../../../services/formatDate";
+import ReservationCard from "../../../components/ReservationCard";
+import filterDates from "../../../services/filterDates";
+import styles from "./styles/ReservationHistory.module.css"
 
 const ReservationsHistory = () => {
     const [reservations, setReservations] = useState([]);
@@ -35,7 +36,7 @@ const ReservationsHistory = () => {
     }
 
     return (
-        <div>
+        <div className= { styles.container }>
             <h2>
                 All of your reservations
             </h2>
@@ -49,7 +50,7 @@ const ReservationsHistory = () => {
 
             <h2>Total: { filterdReservations.length }</h2>
 
-            <div>
+            <div className={ styles.cardsContainer }>
                 {filterdReservations.map((reservation) => (
                     <ReservationCard
                         key={reservation.id}
