@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 import styles from "./styles/Navbar.module.css"
 
-const Navbar = () => {
+const Navbar = ({ option = "default" }) => {
     const navigate = useNavigate();
     const { user, logout } = useAuth();
 
@@ -12,7 +13,13 @@ const Navbar = () => {
 
     return (
         <nav className={styles.navbar}>
-            <div className={styles.logo} onClick={() => handleNavigation("/")}>⚽ Football Booker</div>
+            {option === "fieldDetails" ? 
+                <div className={styles.goBack} onClick={() => handleNavigation(-1)}>
+                    <FaArrowAltCircleLeft /> 
+                </div>
+            :
+                <div className={styles.logo} onClick={() => handleNavigation("/")}>⚽ TNT club</div> 
+            }
             <div className={styles.navLinks}>
             <button onClick={() => handleNavigation("/fields")} >Fields</button>
             {user ? (

@@ -34,3 +34,11 @@
   background-color: var(--color-primary);
   color: var(--color-text-dark);
 }
+
+.goBack {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--color-primary);
+  font-size: 1.75rem;
+}

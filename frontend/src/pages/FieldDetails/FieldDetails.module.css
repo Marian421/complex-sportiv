@@ -5,6 +5,13 @@
   background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; 
+}
+
+.fieldDetails h2 {
+  text-align: center;
 }
 
 .fieldDetails img {
@@ -15,19 +22,19 @@
   margin: 1rem 0;
 }
 
-.calendar-button {
+.calendarButton {
   font-size: 24px;
   border: none;
   background: none;
   cursor: pointer;
   margin-bottom: 1rem;
+  color: var(--color-primary);
 }
 
-.calendar-popup {
-  position: absolute;
-  z-index: 10;
-  margin-top: 1rem;
+.calendarButton:hover {
+  color: white;
 }
+
 
 .timeslotsContainer {
   display: grid;
@@ -36,8 +43,9 @@
   margin-top: 2rem;
 }
 
-.modal-buttons {
+.modalButtons {
   display: flex;
+  justify-content: center;
   gap: 1rem;
   margin-top: 1.5rem;
 }
@@ -64,4 +72,27 @@ button.cancel {
 
 button.cancel:hover {
   background-color: var(--color-cancel-hover);
+}
+
+.flexRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flexRow h3 {
+  flex: 0 0 85%;
+}
+
+.calendarButton:focus,
+.calendarButton:active {
+  outline: none;
+  background: none;
+  color: var(--color-primary);
+}
+
+.calendarWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
 }
