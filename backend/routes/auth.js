@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
-const hash = require('../utils/hash');
 const jwt = require('jsonwebtoken');
 const generateResetCode = require('../utils/generateResetCode');
 const sendResetEmail = require('../emails/sendResetEmail');
 const authenticateToken = require('../middleware/authenticateToken');
+const bcrypt = require('bcrypt');
 
 router.post("/register", async(req, res) => {
     try {
@@ -20,7 +20,7 @@ router.post("/register", async(req, res) => {
             return res.status(409).json({message: "user already registered"}); // 409 - conflict
         }
 
-        const hashedPassword = hash.encrypt(password);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = await pool.query(
             "INSERT INTO users (name, email, password) VALUES ($1,$2,$3) RETURNING *",
@@ -53,7 +53,9 @@ router.post("/login", async(req, res) => {
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
 
-        if (hash.compare(password, user.rows[0].password)){
+        const comparedPasswords = await bcrypt.compare(password, user.rows[0].password)
+
+        if (comparedPasswords) {
             res.cookie("token", token, {
                 httpOnly: true,
                 sameSite: "strict",
@@ -161,7 +163,7 @@ router.post("/reset-password", authenticateToken, async(req,res) => {
         const { newPassword } = req.body;
         const { userId } = req.user;
 
-        const hashedPassword = hash.encrypt(newPassword);
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         const result = await pool.query(
             "UPDATE users SET password = $1 WHERE id = $2 RETURNING *",
