@@ -15,7 +15,6 @@ const AuthForm = ({ formType }) => {
     });
     const [errors, setErrors] = useState({});
     const { login } = useAuth();
-
     const passwordRef = useRef(null);
 
 

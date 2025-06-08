@@ -49,17 +49,11 @@ const FieldDetails = () => {
   };
 
   const fetchTimeSlots = async (fieldId, date) => {
-    console.log(">>> FETCHING SLOTS FOR FIELD:", fieldId);
-    console.log(">>> RAW selectedDate:", date);
-    console.log(">>> TO STRING:", typeof date === "string" ? date : date.toISOString());
     const dateToUse = dayjs(date).format('YYYY/MM/DD');
-    console.log("date to use inside fetchTimeSlots", dateToUse);
     try {
       const response = await timeSlots(fieldId, dateToUse);
       const data = await response.json();
-      console.log(">>> SERVER RESPONSE:", data);
       setTimeSlotsAvailability(data);
-      console.log('state after update', timeSlotsAvailability);
     } catch (error) {
       console.error(error.message);
     }
@@ -123,7 +117,7 @@ const FieldDetails = () => {
       <div className={ styles.timeslotsContainer}>
         {timeSlotsAvailability && timeSlotsAvailability.length > 0 ? (
           timeSlotsAvailability.map((slot) => (
-            <TimeSlotCard key={slot.slot_id} timeSlotDetails={slot} onBook={openModal}/>
+            <TimeSlotCard key={slot.slot_id} timeSlotDetails={slot} onBook={openModal} selectedDate={selectedDate}/>
           ))
         ) : (
           <div>No available slots for this date</div>

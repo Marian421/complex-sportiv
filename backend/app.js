@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const pool = require("./db.js")
 const path = require('path');
 const cookieParser = require('cookie-parser');
 
@@ -18,20 +17,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.get("/", (req, res) => {
-  res.send("Server is running!");
-});
-
 app.use("/auth", auth);
 app.use("/fields", fields);
 app.use("/admin", admin)
-
-app.post("/register", (req, res) => {
-  res.json("works")
-})
-
-app.get("/login", (req, res) => {
-  res.json("all good");
-})
 
 module.exports = app;   

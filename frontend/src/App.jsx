@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthForm from "./pages/AuthForm/AuthForm";
 import NotFoundPage from "./pages/NotFoundPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import AddField from "./pages/DashBoard/Views/AddField";
 import FieldPage from "./pages/FieldPage/FieldPage";
 import HomePage from "./pages/HomePage/HomePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
@@ -28,10 +26,6 @@ const router = createBrowserRouter([
   {
     path: '/reset/new-password',
     element: <ResetPasswordPage />
-  },
-  {
-    path: '/fields/addField',
-    element: <AddField />
   },
   {
     path: '/fields',
