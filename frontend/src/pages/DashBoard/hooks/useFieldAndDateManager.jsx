@@ -9,6 +9,7 @@ const useFieldAndDateManager = () => {
   const [slots, setSlots] = useState([]);
   const [fields, setFields] = useState([]);
 
+  
   useEffect(() => {
     const handleFetch = async () => {
       try {
@@ -20,7 +21,7 @@ const useFieldAndDateManager = () => {
         console.error(error);
       }
     };
-
+    
     handleFetch();
   }, []);
 

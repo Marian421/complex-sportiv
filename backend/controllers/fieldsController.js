@@ -44,8 +44,8 @@ exports.bookSlot = async (req, res) => {
 
     const newBooking = await pool.query(
       `WITH new_res AS (
-         INSERT INTO reservations (user_id, field_id, reservation_date, time_slot_id, status)
-         VALUES ($1, $2, $3, $4, 'pending')
+         INSERT INTO reservations (user_id, field_id, reservation_date, time_slot_id)
+         VALUES ($1, $2, $3, $4)
          RETURNING *
        )
        SELECT new_res.*, f.name AS field_name, t.slot_name

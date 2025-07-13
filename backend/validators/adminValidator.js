@@ -22,16 +22,8 @@ const deleteField = Joi.object({
   field_id: Joi.number().integer().required()
 });
 
-const modifyFieldDetails = Joi.object({
-  field_id: Joi.number().integer().required(),
-  name: Joi.string().min(2),
-  description: Joi.string().allow(''),
-  location: Joi.string().min(2),
-  price_per_hour: Joi.number().positive()
-}).or('name', 'description', 'location', 'price_per_hour');
-
 const addField = Joi.object({
-  name: Joi.string().min(2).required(),
+  name: Joi.string().required(),
   description: Joi.string().allow('').required(),
   location: Joi.string().min(2).required(),
   price_per_hour: Joi.number().positive().required()
@@ -41,6 +33,5 @@ module.exports = {
   makeReservation,
   seeReservationsQuery,
   deleteField,
-  modifyFieldDetails,
   addField
 };

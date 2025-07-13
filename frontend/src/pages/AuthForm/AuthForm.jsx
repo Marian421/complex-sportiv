@@ -58,7 +58,8 @@ const AuthForm = ({ formType }) => {
             console.log(`${formType} form submitted!`, formData);
             try {
                 if (isRegister) {
-                  const response = await registerUser(formData);
+                  const { name, email, password } = formData;
+                  const response = await registerUser({ name, email, password });
 
                   if (response.ok) {
                     setErrorMessage("");

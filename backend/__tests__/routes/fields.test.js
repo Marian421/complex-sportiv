@@ -1,7 +1,6 @@
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../db');
-const hash = require('../../utils/hash');
 const jwt = require('jsonwebtoken');
 const sendResetEmail = require('../../emails/sendResetEmail');
 const generateResetCode = require('../../utils/generateResetCode');
@@ -24,7 +23,6 @@ jest.mock('multer', () => {
     multer.diskStorage = jest.fn(() => ({}))
     return multer;
 });
-jest.mock('../../utils/hash');
 jest.mock('jsonwebtoken');
 jest.mock('../../emails/sendResetEmail');
 jest.mock('../../utils/generateResetCode');
@@ -53,7 +51,7 @@ describe("Fields routes", () => {
 
             expect(res.statusCode).toBe(200);
             expect(res.body).toStrictEqual(mockFields);
-            expect(pool.query).toHaveBeenCalledWith("select * from fields");
+            expect(pool.query).toHaveBeenCalledWith("SELECT * FROM FIELDS");
         });
 
         it("should handle query error", async () => {

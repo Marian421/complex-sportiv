@@ -152,6 +152,17 @@ export const makeReservation = async (formData) => {
   return fetchData('/admin/make-reservation', options);
 }
 
+export const deleteField = async (field_id) => {
+  const options = {
+    method: "DELETE",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ field_id })
+  };
+
+  return fetchData('/admin/delete-field', options);
+}
+
 export const seeReservations = async (data) => {
   const queryParams = new URLSearchParams(data).toString();
 

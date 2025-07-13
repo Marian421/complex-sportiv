@@ -14,7 +14,7 @@ const DASHBOARD_VIEWS = {
 
 const DashBoard = () => {
 
-    const [selectedOption, setSelectedOption] = useState();
+    const [selectedOption, setSelectedOption] = useState(DASHBOARD_VIEWS.ADD_FIELD);
 
     const renderContent = () => {
         switch(selectedOption) {

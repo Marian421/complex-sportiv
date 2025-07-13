@@ -46,7 +46,7 @@ const ResetPasswordPage = () => {
 
   if (isValid === null) return <p>Checking reset code...</p>;
   if (isValid === false) return <p>Invalid or expired reset link.</p>;
-  if (success) return <p>Your password has been updated! 🎉</p>;
+  if (success) return <p>Your password has been updated!</p>;
 
   return (
     <div>

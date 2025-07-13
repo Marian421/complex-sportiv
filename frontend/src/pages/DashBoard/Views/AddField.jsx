@@ -30,6 +30,7 @@ const AddField = () => {
     });
 
     try {
+      console.log(data);
       await postField(data);
     } catch (error) {
       console.error(error.message)

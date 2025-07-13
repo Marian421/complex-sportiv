@@ -1,18 +1,19 @@
 const request = require('supertest');
 const app = require('../../app');
 const pool = require('../../db');
-const hash = require('../../utils/hash');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const sendResetEmail = require('../../emails/sendResetEmail');
 const generateResetCode = require('../../utils/generateResetCode');
 const authenticateToken = require('../../middleware/authenticateToken');
 
 
 jest.mock('../../db');
-jest.mock('../../utils/hash');
+jest.mock('bcrypt');
 jest.mock('jsonwebtoken');
 jest.mock('../../emails/sendResetEmail');
 jest.mock('../../utils/generateResetCode');
+
 jest.mock('../../middleware/authenticateToken', () => (req, res, next) => {
   req.user = { userId: 1 };
   next();
@@ -26,10 +27,10 @@ describe("Auth Routes", () => {
   describe("POST /auth/register", () => {
     it("should register a new user", async () => {
       pool.query
-        .mockResolvedValueOnce({ rowCount: 0 }) // no user exists
-        .mockResolvedValueOnce({ rows: [{ id: 1, name: "John Doe", email: "john@example.com", password: "hashedPassword" }] }); // inserted user
+        .mockResolvedValueOnce({ rowCount: 0 }) 
+        .mockResolvedValueOnce({ rows: [{ id: 1, name: "John Doe", email: "john@example.com", password: "hashedPassword" }] }); 
 
-      hash.encrypt.mockReturnValue("hashedPassword");
+      bcrypt.hash.mockResolvedValueOnce("hashedPassword");
 
       const res = await request(app).post('/auth/register').send({
         name: "John Doe",
@@ -59,7 +60,7 @@ describe("Auth Routes", () => {
   describe("POST /auth/login", () => {
     it("should log in successfully with valid credentials", async () => {
       pool.query.mockResolvedValueOnce({ rowCount: 1, rows: [{ id: 1, email: "john@example.com", password: "hashedPassword", role: "user" }] });
-      hash.compare.mockReturnValue(true);
+      bcrypt.compare.mockResolvedValueOnce(true);
       jwt.sign.mockReturnValue("fake-jwt-token");
 
       const res = await request(app).post('/auth/login').send({
@@ -68,12 +69,12 @@ describe("Auth Routes", () => {
       });
 
       expect(res.statusCode).toBe(200);
-      expect(res.body.message).toBe("logged in succesfully");
+      expect(res.body.message).toBe("logged in successfully");
     });
 
     it("should return invalid password", async () => {
       pool.query.mockResolvedValueOnce({ rowCount: 1, rows: [{ id: 1, email: "john@example.com", password: "hashedPassword" }] });
-      hash.compare.mockReturnValue(false);
+      bcrypt.compare.mockResolvedValueOnce(false);
 
       const res = await request(app).post('/auth/login').send({
         email: "john@example.com",
@@ -185,7 +186,7 @@ describe("Auth Routes", () => {
   describe("POST /auth/reset-password", () => {
     it("should not find the user", async () => {
 
-      hash.encrypt.mockReturnValue('hashedPassword');
+      bcrypt.hash.mockResolvedValueOnce('hashedPassword');
 
       pool.query.mockResolvedValueOnce({ rowCount: 0 });
 
@@ -204,7 +205,7 @@ describe("Auth Routes", () => {
       .mockResolvedValueOnce({ rowCount: 1 })
       .mockResolvedValueOnce({})
 
-      hash.encrypt.mockReturnValue('hashedPassword');
+      bcrypt.hash.mockResolvedValueOnce('hashedPassword');
 
       const res = await request(app).post("/auth/reset-password").send({
         newPassword: "newPassword",

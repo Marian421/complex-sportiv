@@ -9,29 +9,37 @@ const {
   makeReservation,
   seeReservationsQuery,
   deleteField,
-  modifyFieldDetails,
   addField
 } = require('../validators/adminValidator');
 
 router.post(
-    '/make-reservation', validate(makeReservation), 
-    authenticateToken, checkAdminRole, adminController.makeReservation
+    '/make-reservation', 
+    validate(makeReservation), 
+    authenticateToken, 
+    checkAdminRole, 
+    adminController.makeReservation
 );
 router.get(
-    '/see-reservations', validate(seeReservationsQuery, 'query'),
-    authenticateToken, checkAdminRole, adminController.seeReservations
+    '/see-reservations', 
+    validate(seeReservationsQuery, 'query'),
+    authenticateToken, 
+    checkAdminRole, 
+    adminController.seeReservations
 );
 router.delete(
-    '/delete-field', validate(deleteField), 
-    authenticateToken, checkAdminRole, adminController.deleteField
-);
-router.put(
-    '/modify-field-details', validate(modifyFieldDetails),
-    authenticateToken, checkAdminRole, adminController.modifyFieldDetails
+    '/delete-field', 
+    validate(deleteField), 
+    authenticateToken, 
+    checkAdminRole, 
+    adminController.deleteField
 );
 router.post(
-    '/add-field', validate(addField), 
-    authenticateToken, checkAdminRole, upload.single('image'), adminController.addField
+    '/add-field',
+    authenticateToken, 
+    checkAdminRole, 
+    upload.single('image'), 
+    validate(addField), 
+    adminController.addField
 );
 
 module.exports = router;

@@ -11,7 +11,7 @@ const {
   newPasswordSchema
 } = require('../validators/authValidator');
 
-router.post('/register', validate(registerSchema) ,authController.register);
+router.post('/register', validate(registerSchema), authController.register);
 router.post('/login', validate(loginSchema), authController.login);
 router.post('/reset', validate(resetSchema), authController.reset);
 router.post('/verify-reset-code', validate(verifyCodeSchema), authController.verifyResetCode);

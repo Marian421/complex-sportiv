@@ -13,7 +13,7 @@ const FieldCard = ({ field }) => {
       <h3>{field.name}</h3>
       <p>{field.description}</p>
       <p>Location: {field.location}</p>
-      <p>Price: ${field.price_per_hour}/hr</p>
+      <p>Price: {field.price_per_hour} lei/ora</p>
       <img
         src={`http://localhost:5000${field.image_path}`}
         alt={field.name}

@@ -21,13 +21,14 @@ router.get(
 );
 router.post(
   '/book/:fieldId/:slot_id',
-  validate(bookSlotParams, 'params'), validate(bookSlotQuery, 'query'), 
+  validate(bookSlotParams, 'params'),
+  validate(bookSlotQuery, 'query'),
   authenticateToken, 
   fieldsController.bookSlot
 );
 router.delete(
   '/cancel-reservation/:reservationId',
-  validate(cancelReservationParams, 'params'), 
+  validate(cancelReservationParams, 'params'),
   authenticateToken, 
   fieldsController.cancelReservation
 );

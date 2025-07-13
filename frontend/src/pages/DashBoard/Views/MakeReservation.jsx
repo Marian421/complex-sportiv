@@ -52,7 +52,7 @@ const MakeReservation = () => {
             <DatePicker selectedDate={selectedDate} onChange={setSelectedDate} />
             <FieldSelector fields={fields} value={fieldId} onChange={setFieldId} />
             <SlotSelector slots={slots} value={selectedSlot} onChange={setSelectedSlot} />
-            <button type="submit">Book</button>
+            <button type="submit">Rezerva</button>
         </form>
     );
 };

@@ -5,7 +5,7 @@ const getAvailabilityParams = Joi.object({
 });
 
 const getAvailabilityQuery = Joi.object({
-  date: Joi.string().isoDate().required()
+  date: Joi.string().required()
 });
 
 const bookSlotParams = Joi.object({
@@ -14,7 +14,7 @@ const bookSlotParams = Joi.object({
 });
 
 const bookSlotQuery = Joi.object({
-  date: Joi.string().isoDate().required()
+  date: Joi.string().required()
 });
 
 const cancelReservationParams = Joi.object({
