@@ -39,6 +39,10 @@ A full-stack web application for booking football pitches online, built as a the
 - **JWT** - Authentication
 - **Jest/Supertest** - Testing
 
+## Database
+
+- **PostgreSQL**
+
 ## Screenshots
 
 **HomePage**
