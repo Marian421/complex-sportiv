@@ -148,6 +148,7 @@ exports.resetPassword = async (req, res) => {
 
     res.clearCookie("token", {
       httpOnly: true,
+      secure: true,
       sameSite: "None",
     });
 
@@ -181,6 +182,7 @@ exports.getMe = async (req, res) => {
 exports.logout = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
+    secure:true,
     sameSite: "None",
   });
 
