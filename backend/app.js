@@ -10,7 +10,7 @@ const admin = require('./routes/admin.js');
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://complex-sportiv.vercel.app'],
   credentials: true,
 }));
 app.use(cookieParser());
