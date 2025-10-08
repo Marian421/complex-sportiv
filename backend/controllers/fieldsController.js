@@ -57,13 +57,24 @@ exports.bookSlot = async (req, res) => {
 
     const { field_name, slot_name } = newBooking.rows[0];
 
-    const confirmationSent = await sendReservationConfirmation(email, field_name, date, slot_name);
-
-    if (!confirmationSent) {
-      return res.status(201).json({ message: "Reservation created but failed to send confirmation email" });
-    }
-
     res.status(201).json({ message: "Reservation made and email sent" });
+
+    const sendEmailWithRetry = async (attempts = 3, delay = 2000) => {
+      for (let i = 0; i < attempts; i++) {
+        try {
+          await sendReservationConfirmation(email, field_name, date, slot_name);
+          console.log(`Confirmation email sent to ${email}`);
+          return;
+        } catch (err) {
+          console.error(`Attempt ${i + 1} failed to send email:`, err.message);
+          if (i < attempts - 1) await new Promise(r => setTimeout(r, delay)); // wait before retry
+        }
+      }
+      console.error(`All ${attempts} attempts to send email to ${email} failed.`);
+    };
+
+    sendEmailWithRetry();
+
   } catch (error) {
     console.error("Error booking slot:", error.message);
     res.status(500).json({ message: "Server error" });
