@@ -119,7 +119,7 @@ exports.modifyFieldDetails = async (req, res) => {
 exports.addField = async (req, res) => {
   try {
     const { name, description, location, price_per_hour } = req.body;
-    const imagePath = `/uploads/fields/${req.file.filename}`;
+    const imagePath = req.file.path;
 
     const result = await pool.query(
       `INSERT INTO fields (name, description, location, price_per_hour, image_path)

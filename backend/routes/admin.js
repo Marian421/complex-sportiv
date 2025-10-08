@@ -3,7 +3,7 @@ const router = express.Router();
 const authenticateToken = require('../middleware/authenticateToken');
 const checkAdminRole = require('../middleware/checkAdminRole');
 const adminController = require('../controllers/adminController');
-const upload = require('../utils/multerUpload');
+const upload = require('../cloudinary');
 const validate = require('../middleware/validate');
 const {
   makeReservation,
