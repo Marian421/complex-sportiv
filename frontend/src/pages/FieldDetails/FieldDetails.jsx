@@ -90,7 +90,7 @@ const FieldDetails = () => {
       <p>Location: {field.location}</p>
       <p>Price: {field.price_per_hour} lei/ora</p>
       <img
-        src={`http://localhost:5000${field.image_path}`}
+        src={field.image_path}
         alt={field.name}
         width="400"
       />

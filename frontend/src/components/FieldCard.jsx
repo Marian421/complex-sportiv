@@ -3,7 +3,6 @@ import styles from "./styles/FieldCard.module.css"
 
 const FieldCard = ({ field }) => {
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleViewDetails = () => {
     navigate(`/fields/${field.id}`, {state: { field }});
@@ -16,7 +15,7 @@ const FieldCard = ({ field }) => {
       <p>Location: {field.location}</p>
       <p>Price: {field.price_per_hour} lei/ora</p>
       <img
-        src={`${API_URL}${field.image_path}`}
+        src={field.image_path}
         alt={field.name}
         width="300"
       />
