@@ -15,7 +15,15 @@ app.use(cors({
 }));
 app.use(cookieParser());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use(
+  "/uploads",
+  cors({
+    origin: ["http://localhost:5173", "https://complex-sportiv.vercel.app"],
+    credentials: true,
+  }),
+  express.static(path.join(__dirname, "uploads"))
+);app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use("/auth", auth);
 app.use("/fields", fields);
