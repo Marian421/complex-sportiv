@@ -5,7 +5,7 @@ const isBooked = (slots, slotId) => {
     if (slot) {
         return slot.isBooked; 
     }
-    return true; 
+    return false; 
 }
 
 module.exports = isBooked;
