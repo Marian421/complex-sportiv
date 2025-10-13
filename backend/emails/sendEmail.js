@@ -1,46 +1,27 @@
-const nodemailer = require("nodemailer");
+const sgMail = require('@sendgrid/mail');
 
-console.log('EMAIL_USER:', process.env.EMAIL_USER); // Debug
-console.log('EMAIL_PASS:', process.env.EMAIL_PASS); // Debug
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // Use TLS
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-  connectionTimeout: 10000, // 10 seconds
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
-});
-
-// Verify transporter on startup
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('Transporter verification failed:', error.message, error);
-  } else {
-    console.log('Transporter is ready to send emails');
-  }
-});
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const sendEmail = async (to, subject, text, html) => {
   try {
-    console.log('Sending email to:', to); // Debug
-    const info = await transporter.sendMail({
-      from: `"sports_booking" <${process.env.EMAIL_USER}>`,
+    const msg = {
       to,
+      from: 'herciumarian8@gmail.com', // must be verified in SendGrid
       subject,
       text,
       html,
-    });
-    console.log('Email sent, message ID:', info.messageId);
-    return info.accepted.length > 0 ? 1 : 0;
-  } catch (err) {
-    console.error('Email error:', err.message, err);
-    throw err; // Propagate error
+    };
+    const result = await sgMail.send(msg);
+    console.log('Email sent successfully');
+    return result[0].statusCode === 202 ? 1 : 0;
+  } catch (error) {
+    console.error('Email send error:', error);
+    if (error.response) {
+      console.error(error.response.body);
+    }
+    throw error;
   }
 };
 
 module.exports = sendEmail;
+
