@@ -5,8 +5,8 @@ console.log('EMAIL_PASS:', process.env.EMAIL_PASS); // Debug
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // Use TLS
+  port: 465,
+  secure: true, // Use TLS
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,

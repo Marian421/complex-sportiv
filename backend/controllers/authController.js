@@ -77,7 +77,7 @@ exports.reset = async (req, res) => {
     );
 
     const code = generateResetCode();
-    const resetLink = `http://localhost:5173/reset/new-password?code=${code}`;
+    const resetLink = `https://complex-sportiv.vercel.app/reset/new-password?code=${code}`;
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
     const inserted = await pool.query(
