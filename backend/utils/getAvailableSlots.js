@@ -1,10 +1,11 @@
-const pool = require('../db');
+const pool = require("../db");
 
 // querry the database to find all availabe time slots for a given date and field
 
 const getAvailableSlots = async (fieldId, date) => {
   try {
-    const result = await pool.query(`
+    const result = await pool.query(
+      `
       SELECT ts.id AS slot_id, 
              ts.slot_name, 
              CASE WHEN r.id IS NULL THEN false ELSE true END AS isBooked
@@ -14,12 +15,14 @@ const getAvailableSlots = async (fieldId, date) => {
         AND r.field_id = $1
         AND r.reservation_date = $2
       WHERE ts.id IS NOT NULL
-    `, [fieldId, date]);
+    `,
+      [fieldId, date],
+    );
 
     return result.rows;
   } catch (error) {
-    console.error('Error fetching available slots:', error);
-    throw error; 
+    console.error("Error fetching available slots:", error);
+    throw error;
   }
 };
 

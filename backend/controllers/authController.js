@@ -1,14 +1,16 @@
-const pool = require('../db');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const generateResetCode = require('../utils/generateResetCode');
-const sendResetEmail = require('../emails/sendResetEmail');
+const pool = require("../db");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const generateResetCode = require("../utils/generateResetCode");
+const sendResetEmail = require("../emails/sendResetEmail");
 
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
     if (user.rowCount !== 0) {
       return res.status(409).json({ message: "user already registered" });
     }
@@ -17,7 +19,7 @@ exports.register = async (req, res) => {
 
     const newUser = await pool.query(
       "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *",
-      [name, email, hashedPassword]
+      [name, email, hashedPassword],
     );
 
     const { password: _, ...userWithoutPassword } = newUser.rows[0];
@@ -31,7 +33,9 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
 
     if (user.rowCount === 0) {
       return res.status(401).json({ message: "Email not found" });
@@ -43,12 +47,12 @@ exports.login = async (req, res) => {
     const token = jwt.sign(
       { userId: user.rows[0].id, role: user.rows[0].role, email },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
+      { expiresIn: process.env.JWT_EXPIRES_IN },
     );
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure:true,
+      secure: true,
       sameSite: "None",
       maxAge: 2 * 60 * 60 * 1000,
     });
@@ -64,16 +68,20 @@ exports.reset = async (req, res) => {
   try {
     const { email } = req.body;
 
-    const user = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
+    const user = await pool.query("SELECT id FROM users WHERE email = $1", [
+      email,
+    ]);
     if (user.rowCount === 0) {
-      return res.status(404).json({ message: "There is no account with this email" });
+      return res
+        .status(404)
+        .json({ message: "There is no account with this email" });
     }
 
     const userId = user.rows[0].id;
 
     await pool.query(
       "UPDATE reset_password SET used = true WHERE user_id = $1 AND used = false AND expires_at > NOW()",
-      [userId]
+      [userId],
     );
 
     const code = generateResetCode();
@@ -82,13 +90,17 @@ exports.reset = async (req, res) => {
 
     const inserted = await pool.query(
       "INSERT INTO reset_password (user_id, code, expires_at) VALUES ($1, $2, $3) RETURNING id",
-      [userId, code, expiresAt]
+      [userId, code, expiresAt],
     );
 
     const emailSent = await sendResetEmail(email, resetLink);
     if (!emailSent) {
-      await pool.query("DELETE FROM reset_password WHERE id = $1", [inserted.rows[0].id]);
-      return res.status(500).json({ message: "Failed to send reset email. Try again later." });
+      await pool.query("DELETE FROM reset_password WHERE id = $1", [
+        inserted.rows[0].id,
+      ]);
+      return res
+        .status(500)
+        .json({ message: "Failed to send reset email. Try again later." });
     }
 
     res.json({ message: "Email sent successfully" });
@@ -104,19 +116,23 @@ exports.verifyResetCode = async (req, res) => {
 
     const result = await pool.query(
       "SELECT * FROM reset_password WHERE code = $1 AND used = false AND expires_at > NOW()",
-      [code]
+      [code],
     );
 
     if (result.rowCount === 0) {
-      return res.status(404).json({ message: "Invalid or expired reset code." });
+      return res
+        .status(404)
+        .json({ message: "Invalid or expired reset code." });
     }
 
     const userId = result.rows[0].user_id;
-    const resetToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const resetToken = jwt.sign({ userId }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.cookie("token", resetToken, {
       httpOnly: true,
-      secure:true,
+      secure: true,
       sameSite: "None",
       maxAge: 60 * 60 * 1000,
     });
@@ -137,14 +153,17 @@ exports.resetPassword = async (req, res) => {
 
     const updated = await pool.query(
       "UPDATE users SET password = $1 WHERE id = $2 RETURNING id",
-      [hashedPassword, userId]
+      [hashedPassword, userId],
     );
 
     if (updated.rowCount === 0) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    await pool.query("UPDATE reset_password SET used = true WHERE user_id = $1", [userId]);
+    await pool.query(
+      "UPDATE reset_password SET used = true WHERE user_id = $1",
+      [userId],
+    );
 
     res.clearCookie("token", {
       httpOnly: true,
@@ -165,7 +184,7 @@ exports.getMe = async (req, res) => {
 
     const result = await pool.query(
       "SELECT id, name, email, role FROM users WHERE id = $1",
-      [userId]
+      [userId],
     );
 
     if (result.rowCount === 0) {
@@ -182,7 +201,7 @@ exports.getMe = async (req, res) => {
 exports.logout = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure:true,
+    secure: true,
     sameSite: "None",
   });
 
@@ -193,7 +212,9 @@ exports.deleteAccount = async (req, res) => {
   try {
     const { userId } = req.user;
 
-    const result = await pool.query("DELETE FROM users WHERE id = $1", [userId]);
+    const result = await pool.query("DELETE FROM users WHERE id = $1", [
+      userId,
+    ]);
 
     if (result.rowCount === 0) {
       return res.status(404).json({ message: "User not found" });

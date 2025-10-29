@@ -1,4 +1,4 @@
-const sendEmail = require('./sendEmail');
+const sendEmail = require("./sendEmail");
 
 const sendReservationConfirmation = async (to, fieldName, date, slotName) => {
   const subject = "Reservation Confirmation";

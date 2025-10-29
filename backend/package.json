@@ -5,7 +5,9 @@
   "scripts": {
     "test": "NODE_ENV=test jest",
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "format:write": "prettier --write \"**/*.{js,ts,json,css,md}\"",
+    "format:check": "prettier --check \"**/*.{js,ts,json,css,md}\""
   },
   "keywords": [],
   "author": "",
@@ -30,6 +32,14 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.9",
+    "prettier": "3.6.2",
     "supertest": "^7.1.0"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "useTabs": false,
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": false
   }
 }

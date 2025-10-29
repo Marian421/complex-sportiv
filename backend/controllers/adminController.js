@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require("../db");
 
 exports.makeReservation = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ exports.makeReservation = async (req, res) => {
     const result = await pool.query(
       `INSERT INTO reservations (guest_name, guest_phone, field_id, reservation_date, time_slot_id)
        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [guest_name, guest_phone, fieldId, date, slotId]
+      [guest_name, guest_phone, fieldId, date, slotId],
     );
 
     res.json({ data: result.rows[0] });
@@ -40,7 +40,7 @@ exports.seeReservations = async (req, res) => {
          AND r.field_id = $1
          AND r.reservation_date = $2
        LEFT JOIN users u ON r.user_id = u.id`,
-      [fieldId, date]
+      [fieldId, date],
     );
 
     res.json(result.rows);
@@ -56,7 +56,7 @@ exports.deleteField = async (req, res) => {
 
     const result = await pool.query(
       "DELETE FROM fields WHERE id = $1 RETURNING *",
-      [field_id]
+      [field_id],
     );
 
     if (result.rowCount === 0) {
@@ -105,8 +105,8 @@ exports.modifyFieldDetails = async (req, res) => {
     values.push(field_id);
 
     const result = await pool.query(
-      `UPDATE fields SET ${fields.join(', ')} WHERE id = $${index} RETURNING *`,
-      values
+      `UPDATE fields SET ${fields.join(", ")} WHERE id = $${index} RETURNING *`,
+      values,
     );
 
     res.json({ data: result.rows[0] });
@@ -124,7 +124,7 @@ exports.addField = async (req, res) => {
     const result = await pool.query(
       `INSERT INTO fields (name, description, location, price_per_hour, image_path)
        VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [name, description, location, price_per_hour, imagePath]
+      [name, description, location, price_per_hour, imagePath],
     );
 
     res.json(result.rows[0]);

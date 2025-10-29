@@ -1,7 +1,7 @@
-const pool = require('../db');
-const getAvailableSlots = require('../utils/getAvailableSlots');
-const sendReservationConfirmation = require('../emails/sendReservationEmail');
-const checkValidCancel = require('../utils/checkValidCancel');
+const pool = require("../db");
+const getAvailableSlots = require("../utils/getAvailableSlots");
+const sendReservationConfirmation = require("../emails/sendReservationEmail");
+const checkValidCancel = require("../utils/checkValidCancel");
 
 exports.getAllFields = async (req, res) => {
   try {
@@ -22,7 +22,9 @@ exports.getAvailability = async (req, res) => {
     res.json(availableSlots);
   } catch (error) {
     console.error("Error fetching field availability:", error);
-    res.status(500).json({ message: "Error fetching availability", date, fieldId });
+    res
+      .status(500)
+      .json({ message: "Error fetching availability", date, fieldId });
   }
 };
 
@@ -35,7 +37,7 @@ exports.bookSlot = async (req, res) => {
     const existingReservation = await pool.query(
       `SELECT * FROM reservations 
        WHERE reservation_date = $1 AND field_id = $2 AND time_slot_id = $3`,
-      [date, fieldId, slot_id]
+      [date, fieldId, slot_id],
     );
 
     if (existingReservation.rowCount > 0) {
@@ -52,7 +54,7 @@ exports.bookSlot = async (req, res) => {
        FROM new_res
        JOIN fields f ON new_res.field_id = f.id
        JOIN time_slots t ON new_res.time_slot_id = t.id`,
-      [userId, fieldId, date, slot_id]
+      [userId, fieldId, date, slot_id],
     );
 
     const { field_name, slot_name } = newBooking.rows[0];
@@ -67,14 +69,15 @@ exports.bookSlot = async (req, res) => {
           return;
         } catch (err) {
           console.error(`Attempt ${i + 1} failed to send email:`, err.message);
-          if (i < attempts - 1) await new Promise(r => setTimeout(r, delay)); // wait before retry
+          if (i < attempts - 1) await new Promise((r) => setTimeout(r, delay)); // wait before retry
         }
       }
-      console.error(`All ${attempts} attempts to send email to ${email} failed.`);
+      console.error(
+        `All ${attempts} attempts to send email to ${email} failed.`,
+      );
     };
 
     sendEmailWithRetry();
-
   } catch (error) {
     console.error("Error booking slot:", error.message);
     res.status(500).json({ message: "Server error" });
@@ -98,7 +101,7 @@ exports.getReservationHistory = async (req, res) => {
        JOIN fields f ON r.field_id = f.id
        JOIN time_slots t ON r.time_slot_id = t.id
        WHERE r.user_id = $1`,
-      [userId]
+      [userId],
     );
 
     res.json(result.rows);
@@ -117,7 +120,7 @@ exports.cancelReservation = async (req, res) => {
        FROM reservations r
        JOIN time_slots t ON r.time_slot_id = t.id
        WHERE r.id = $1`,
-      [reservationId]
+      [reservationId],
     );
 
     if (result.rowCount === 0) {
