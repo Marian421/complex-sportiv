@@ -7,7 +7,8 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "format:write": "prettier --write \"**/*.{js,ts,json,css,md}\"",
-    "format:check": "prettier --check \"**/*.{js,ts,json,css,md}\""
+    "format:check": "prettier --check \"**/*.{js,ts,json,css,md}\"",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
@@ -30,6 +31,9 @@
     "pg": "^8.16.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.38.0",
+    "eslint": "^9.38.0",
+    "globals": "^16.4.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.9",
     "prettier": "3.6.2",

@@ -1,0 +1,30 @@
+name: Client CI
+
+on:
+  pull_request:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/client-ci.yml"
+
+jobs:
+  styles:
+    name: "Styles"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.10.0
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formating
+        run: npm run format:check
+
+      - name: Check linting
+        run: npm run lint --max-warning=0
